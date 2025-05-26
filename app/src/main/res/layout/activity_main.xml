@@ -72,7 +72,6 @@
             </LinearLayout>
 
             <!-- Фільтр -->
-            <!-- Фільтр -->
             <LinearLayout
                 android:id="@+id/filter_block"
                 android:layout_width="0dp"
