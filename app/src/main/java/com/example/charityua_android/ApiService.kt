@@ -15,6 +15,12 @@ interface ApiService {
     @POST("/register")
     suspend fun register(@Body request: RegisterRequest): Response<Void>
 
+    @POST("/forgot-password")
+    suspend fun forgotPassword(@Body request: ForgotPasswordRequest): Response<Void>
+
+    @POST("/reset-password")
+    suspend fun resetPassword(@Body request: ResetPasswordRequest): Response<Void>
+
     @GET("/me")
     suspend fun getProfile(@Header("Authorization") token: String): Response<UserProfile>
 
