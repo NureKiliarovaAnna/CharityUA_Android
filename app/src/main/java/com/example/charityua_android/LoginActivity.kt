@@ -1,38 +1,82 @@
 package com.example.charityua_android
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
+import retrofit2.HttpException
+import java.io.IOException
 
 class LoginActivity : AppCompatActivity() {
+    private lateinit var emailInput: EditText
+    private lateinit var passwordInput: EditText
+    private lateinit var loginButton: Button
+    private lateinit var loginError: TextView
+    private lateinit var forgotPassword: TextView
+    private lateinit var registerLink: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        val emailField = findViewById<EditText>(R.id.email)
-        val passwordField = findViewById<EditText>(R.id.password)
-        val loginButton = findViewById<Button>(R.id.login_button)
-        val registerLink = findViewById<TextView>(R.id.register_link)
+        emailInput = findViewById(R.id.email_input)
+        passwordInput = findViewById(R.id.password_input)
+        loginButton = findViewById(R.id.login_button)
+        loginError = findViewById(R.id.login_error)
+        forgotPassword = findViewById(R.id.forgot_password)
+        registerLink = findViewById(R.id.register_link)
 
         loginButton.setOnClickListener {
-            val email = emailField.text.toString()
-            val password = passwordField.text.toString()
+            val email = emailInput.text.toString().trim()
+            val password = passwordInput.text.toString().trim()
 
             if (email.isEmpty() || password.isEmpty()) {
-                Toast.makeText(this, "Заповніть усі поля", Toast.LENGTH_SHORT).show()
-            } else {
-                // TODO: реалізуй логіку входу (через API/локально)
-                Toast.makeText(this, "Успішний вхід (імітація)", Toast.LENGTH_SHORT).show()
-                // Наприклад, перехід до головної сторінки:
-                // startActivity(Intent(this, MainActivity::class.java))
+                showError("Заповніть всі поля")
+                return@setOnClickListener
+            }
+
+            lifecycleScope.launch {
+                try {
+                    val response = RetrofitClient.instance.login(LoginRequest(email, password))
+                    if (response.isSuccessful) {
+                        val token = response.body()?.token ?: ""
+                        getSharedPreferences("auth", Context.MODE_PRIVATE)
+                            .edit()
+                            .putString("jwt_token", token)
+                            .apply()
+
+                        loginError.visibility = TextView.GONE
+                        Toast.makeText(this@LoginActivity, "Вхід успішний", Toast.LENGTH_SHORT).show()
+
+                        startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+                        finish()
+                    } else {
+                        showError("Невірний email або пароль")
+                    }
+                } catch (e: HttpException) {
+                    showError("HTTP помилка: ${e.code()}")
+                } catch (e: IOException) {
+                    showError("Немає доступу до сервера")
+                } catch (e: Exception) {
+                    showError("Помилка: ${e.localizedMessage}")
+                }
             }
         }
 
-        registerLink.setOnClickListener {
-            // TODO: реалізуй перехід до активності реєстрації
-            Toast.makeText(this, "Переходимо до реєстрації", Toast.LENGTH_SHORT).show()
+        forgotPassword.setOnClickListener {
+            startActivity(Intent(this, ForgotPasswordActivity::class.java))
         }
+
+        registerLink.setOnClickListener {
+            startActivity(Intent(this, RegisterActivity::class.java))
+        }
+    }
+
+    private fun showError(message: String) {
+        loginError.text = message
+        loginError.visibility = TextView.VISIBLE
     }
 }
