@@ -1,20 +1,58 @@
 package com.example.charityua_android
 
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
+import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.charityua_android.databinding.ActivityMainBinding
+import kotlinx.coroutines.launch
+import retrofit2.HttpException
+import java.io.IOException
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityMainBinding
+    private lateinit var adapter: FundraiserAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContentView(R.layout.activity_main)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
+
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        // Налаштування RecyclerView
+        adapter = FundraiserAdapter(listOf()) { fundraiser ->
+            Toast.makeText(this, "Вибрано: ${fundraiser.title}", Toast.LENGTH_SHORT).show()
+            // TODO: перехід на FundraiserDetailsActivity
+        }
+
+        binding.fundraisersRecycler.layoutManager = LinearLayoutManager(this)
+        binding.fundraisersRecycler.adapter = adapter
+
+        // Завантаження зборів
+        loadFundraisers()
+    }
+
+    private fun loadFundraisers() {
+        lifecycleScope.launch {
+            try {
+                val response = RetrofitClient.instance.getFundraisers()
+                if (response.isSuccessful && response.body() != null) {
+                    val fundraisers = response.body()!!
+                    adapter = FundraiserAdapter(fundraisers) {
+                        Toast.makeText(this@MainActivity, "Деталі: ${it.title}", Toast.LENGTH_SHORT).show()
+                    }
+                    binding.fundraisersRecycler.adapter = adapter
+                } else {
+                    Toast.makeText(this@MainActivity, "Помилка сервера: ${response.code()}", Toast.LENGTH_SHORT).show()
+                }
+            } catch (e: IOException) {
+                Toast.makeText(this@MainActivity, "Проблема з мережею", Toast.LENGTH_SHORT).show()
+            } catch (e: HttpException) {
+                Toast.makeText(this@MainActivity, "HTTP помилка: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 }

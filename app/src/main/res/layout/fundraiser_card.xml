@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginVertical="10dp"
+    android:layout_marginHorizontal="12dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="4dp"
+    android:foreground="?android:attr/selectableItemBackground">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@android:color/white">
+
+        <!-- Заголовок -->
+        <TextView
+            android:id="@+id/fundraiser_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:background="#2C2C2C"
+            android:textColor="@android:color/white"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:text="Назва збору" />
+
+        <!-- Зображення + термін -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/fundraiser_image"
+                android:layout_width="match_parent"
+                android:layout_height="180dp"
+                android:scaleType="centerCrop"
+                android:contentDescription="Зображення збору"
+                android:src="@drawable/placeholder"
+                android:layout_margin="4dp" />
+
+            <LinearLayout
+                android:id="@+id/deadline_box"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_margin="8dp"
+                android:orientation="vertical"
+                android:background="@android:color/white"
+                android:padding="6dp">
+
+                <TextView
+                    android:id="@+id/fundraiser_deadline_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Термін реалізації:"
+                    android:textSize="12sp"
+                    android:textColor="#444444" />
+
+                <TextView
+                    android:id="@+id/fundraiser_deadline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="15.06.2025"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:textColor="#000000" />
+            </LinearLayout>
+        </RelativeLayout>
+
+        <!-- Сума і кнопка -->
+        <LinearLayout
+            android:id="@+id/summary_section"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="10dp"
+            android:paddingTop="6dp"
+            android:paddingBottom="10dp"
+            android:background="#F1F1F1"
+            android:baselineAligned="false">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Зібрано:"
+                    android:textSize="12sp"
+                    android:textColor="#555555" />
+
+                <TextView
+                    android:id="@+id/fundraiser_raised"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="10690"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textColor="#008000" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Ціль:"
+                    android:textSize="12sp"
+                    android:textColor="#555555" />
+
+                <TextView
+                    android:id="@+id/fundraiser_goal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="480000"
+                    android:textSize="14sp"
+                    android:textColor="#000000"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <!-- Статус або Кнопка -->
+            <Button
+                android:id="@+id/fundraiser_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:text="ДЕТАЛЬНІШЕ"
+                android:textAllCaps="true"
+                android:textColor="@android:color/white"
+                android:textSize="12sp"
+                android:backgroundTint="#002D85" />
+        </LinearLayout>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

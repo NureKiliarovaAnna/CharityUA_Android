@@ -21,11 +21,11 @@ interface ApiService {
     @POST("/reset-password")
     suspend fun resetPassword(@Body request: ResetPasswordRequest): Response<Void>
 
+    @GET("/moderator/fundraisers/active")
+    suspend fun getFundraisers(): Response<List<Fundraiser>>
+
     @GET("/me")
     suspend fun getProfile(@Header("Authorization") token: String): Response<UserProfile>
-
-    @GET("/fundraisers")
-    suspend fun getFundraisers(): Response<List<Fundraiser>>
 
     @GET("/categories")
     suspend fun getCategories(): Response<List<Category>>

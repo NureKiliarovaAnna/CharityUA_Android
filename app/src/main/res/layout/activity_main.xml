@@ -1,82 +1,207 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <androidx.drawerlayout.widget.DrawerLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main_drawer_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#FFA500">
 
-    <!-- Основний вміст -->
-    <LinearLayout
+    <!-- Контейнер контенту + меню -->
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:background="#FFA500">
+        android:layout_height="match_parent">
 
         <!-- Верхня панель -->
         <LinearLayout
             android:id="@+id/top_panel"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:background="@android:color/white"
             android:padding="12dp"
             android:gravity="center_vertical"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:elevation="6dp"
+            android:weightSum="2">
+
+            <!-- Сортування -->
+            <LinearLayout
+                android:id="@+id/sort_block"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <ImageButton
+                    android:id="@+id/sort_button"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:padding="4dp"
+                    android:src="@drawable/ic_sort"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:scaleType="fitCenter"
+                    android:contentDescription="Сортування" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginStart="8dp">
+
+                    <TextView
+                        android:id="@+id/sort_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Сортування"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="#000000"/>
+
+                    <TextView
+                        android:id="@+id/sort_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="за датою завершення"
+                        android:textSize="12sp"
+                        android:textColor="#555555"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Фільтр -->
+            <!-- Фільтр -->
+            <LinearLayout
+                android:id="@+id/filter_block"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:id="@+id/filter_icon"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:src="@drawable/ic_filter"
+                    android:scaleType="fitCenter"
+                    android:contentDescription="Фільтр" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginStart="8dp">
+
+                    <TextView
+                        android:id="@+id/filter_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Фільтр"
+                        android:textStyle="bold"
+                        android:textSize="14sp"
+                        android:textColor="#000000" />
+
+                    <TextView
+                        android:id="@+id/filter_summary"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="не обрано"
+                        android:textSize="12sp"
+                        android:textColor="#777777" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Нижнє меню -->
+        <LinearLayout
+            android:id="@+id/bottom_nav"
+            android:layout_width="0dp"
+            android:layout_height="64dp"
             android:background="@android:color/white"
-            android:elevation="6dp">
+            android:orientation="horizontal"
+            android:weightSum="2"
+            android:elevation="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
-            <ImageButton
-                android:id="@+id/sort_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_sort"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="Сортування" />
+            <!-- Головна -->
+            <LinearLayout
+                android:id="@+id/nav_home"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackground">
 
-            <TextView
-                android:id="@+id/sort_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Сортування за датою завершення"
-                android:textColor="#000000"
-                android:textSize="16sp"
-                android:layout_marginStart="8dp"
-                android:layout_weight="1" />
+                <ImageView
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:src="@drawable/ic_home"
+                    android:layout_marginBottom="2dp"
+                    app:tint="#000000" />
 
-            <ImageButton
-                android:id="@+id/filter_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_filter"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="Фільтр" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Головна"
+                    android:textColor="#000000"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <!-- Кабінет -->
+            <LinearLayout
+                android:id="@+id/nav_profile"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackground">
+
+                <ImageView
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:src="@drawable/ic_user"
+                    android:layout_marginBottom="2dp"
+                    app:tint="#000000" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Кабінет"
+                    android:textColor="#000000"
+                    android:textSize="12sp" />
+            </LinearLayout>
         </LinearLayout>
 
         <!-- Список зборів -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/fundraisers_recycler"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_weight="1"
+            app:layout_constraintTop_toBottomOf="@id/top_panel"
+            app:layout_constraintBottom_toTopOf="@id/bottom_nav"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             android:padding="8dp"
             android:clipToPadding="false" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <!-- Нижнє меню -->
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/bottom_nav"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@android:color/white"
-            app:menu="@menu/bottom_nav_menu"
-            android:elevation="8dp"/>
-    </LinearLayout>
-
-    <!-- Drawer: Сортування -->
+    <!-- Drawer сортування (зліва) -->
     <LinearLayout
         android:id="@+id/sort_drawer"
         android:layout_width="300dp"
         android:layout_height="match_parent"
-        android:layout_gravity="end"
+        android:layout_gravity="start"
         android:orientation="vertical"
         android:background="@android:color/white"
         android:padding="16dp">
@@ -109,7 +234,7 @@
         </RadioGroup>
     </LinearLayout>
 
-    <!-- Drawer: Фільтр -->
+    <!-- Drawer фільтр (справа) -->
     <ScrollView
         android:id="@+id/filter_drawer"
         android:layout_width="300dp"
@@ -138,13 +263,13 @@
                 android:textStyle="bold"
                 android:layout_marginTop="8dp"/>
 
-            <!-- Тут потім підставимо динамічно CheckBox-и з категорій -->
+            <!-- динамічні категорії додаються з коду -->
 
             <CheckBox
                 android:id="@+id/filter_almost_finished"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Завершується (<10% до мети)"
+                android:text="Завершується (менше 10% до мети)"
                 android:layout_marginTop="12dp"/>
 
             <Button
