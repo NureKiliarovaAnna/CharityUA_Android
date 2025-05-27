@@ -1,8 +1,24 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+    <!-- Денна тема CharityUA -->
     <style name="Base.Theme.CharityUA_Android" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <!-- Основні кольори -->
+        <item name="colorPrimary">#FFA500</item> <!-- помаранчевий -->
+        <item name="colorOnPrimary">#FFFFFF</item>
+        <item name="colorControlActivated">#002D85</item>
+        <item name="colorAccent">#002D85</item>
+
+        <item name="colorSecondary">#002D85</item> <!-- темно-синій для кнопок -->
+        <item name="colorOnSecondary">#FFFFFF</item>
+
+        <!-- Фон та поверхні -->
+        <item name="android:colorBackground">#FFF8F0</item> <!-- світлий фон -->
+        <item name="colorSurface">#FFFFFF</item>
+        <item name="colorOnSurface">#000000</item>
+
+        <!-- Вимкнення системної фіолетової -->
+        <item name="android:colorAccent">#002D85</item>
+        <item name="colorPrimaryContainer">#FFA500</item>
     </style>
+
     <style name="Theme.CharityUA_Android" parent="Base.Theme.CharityUA_Android" />
 </resources>

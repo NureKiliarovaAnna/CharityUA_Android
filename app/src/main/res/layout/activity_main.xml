@@ -263,6 +263,19 @@
                 android:layout_marginTop="8dp"/>
 
             <!-- динамічні категорії додаються з коду -->
+            <LinearLayout
+                android:id="@+id/filter_categories_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="4dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="За статусом збору"
+                android:textStyle="bold"
+                android:layout_marginTop="12dp"/>
 
             <CheckBox
                 android:id="@+id/filter_almost_finished"

@@ -21,6 +21,8 @@ class FundraiserAdapter(
         val goal: TextView = view.findViewById(R.id.fundraiser_goal)
         val button: Button = view.findViewById(R.id.fundraiser_button)
         val summarySection: LinearLayout = view.findViewById(R.id.summary_section)
+        val progressBar: ProgressBar = view.findViewById(R.id.fundraiser_progress_bar)
+        val percentText: TextView = view.findViewById(R.id.fundraiser_percent_text)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FundraiserViewHolder {
@@ -34,37 +36,45 @@ class FundraiserAdapter(
     override fun onBindViewHolder(holder: FundraiserViewHolder, position: Int) {
         val fundraiser = fundraisers[position]
 
+        // Основна інформація
         holder.title.text = fundraiser.title
-        holder.deadline.text = fundraiser.created_at.take(10) // YYYY-MM-DD
+        holder.deadline.text = fundraiser.created_at.take(10)
         holder.raised.text = fundraiser.current_amount.toString()
         holder.goal.text = fundraiser.goal_amount.toString()
 
-        // Завантаження зображення (перше з media_urls)
+        // Зображення
         val imageUrl = fundraiser.media_urls.firstOrNull()
         if (imageUrl != null) {
             Glide.with(holder.itemView.context)
                 .load(imageUrl)
                 .placeholder(R.drawable.placeholder)
                 .into(holder.image)
+        } else {
+            holder.image.setImageResource(R.drawable.placeholder)
         }
 
-        // Обчислюємо відсоток до завершення
+        // Прогрес у відсотках
+        val progressPercent = (fundraiser.current_amount * 100 / fundraiser.goal_amount).coerceAtMost(100)
+        holder.progressBar.progress = progressPercent
+        holder.percentText.text = "Прогрес: $progressPercent%"
+
+        // Обчислення, чи залишилось менше 10%
         val left = fundraiser.goal_amount - fundraiser.current_amount
         val percentageLeft = left.toDouble() / fundraiser.goal_amount
 
-        if (percentageLeft < 0.1) {
-            // < 10% до завершення
-            holder.summarySection.setBackgroundColor(Color.parseColor("#C8FAD0"))
-            holder.button.setBackgroundColor(Color.parseColor("#B00020"))
+        if (percentageLeft < 0.1 && progressPercent < 100) {
+            // Залишилось <10% до цілі — ВИДІЛИТИ
+            holder.summarySection.setBackgroundColor(Color.parseColor("#C8FAD0"))  // світло-зелений
+            holder.button.setBackgroundColor(Color.parseColor("#B00020"))          // червоний
             holder.button.text = "ЗАВЕРШУЄТЬСЯ"
         } else {
             // Стандартний вигляд
-            holder.summarySection.setBackgroundColor(Color.parseColor("#F1F1F1"))
-            holder.button.setBackgroundColor(Color.parseColor("#002D85"))
+            holder.summarySection.setBackgroundColor(Color.parseColor("#F1F1F1"))  // сірий
+            holder.button.setBackgroundColor(Color.parseColor("#002D85"))          // синій
             holder.button.text = "ДЕТАЛЬНІШЕ"
         }
 
-        // Клік по кнопці
+        // Кнопка
         holder.button.setOnClickListener {
             onDetailsClick(fundraiser)
         }

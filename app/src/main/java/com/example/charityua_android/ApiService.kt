@@ -21,8 +21,8 @@ interface ApiService {
     @POST("/reset-password")
     suspend fun resetPassword(@Body request: ResetPasswordRequest): Response<Void>
 
-    @GET("/moderator/fundraisers/active")
-    suspend fun getFundraisers(): Response<List<Fundraiser>>
+    @GET("/public/fundraisers/active")
+    suspend fun getActiveFundraisers(): Response<List<Fundraiser>>
 
     @GET("/me")
     suspend fun getProfile(@Header("Authorization") token: String): Response<UserProfile>
