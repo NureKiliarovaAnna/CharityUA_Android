@@ -143,7 +143,7 @@
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:src="@drawable/ic_home"
-                    android:layout_marginBottom="2dp"
+                    android:layout_marginBottom="5dp"
                     app:tint="#000000" />
 
                 <TextView
@@ -167,10 +167,10 @@
                 android:background="?attr/selectableItemBackground">
 
                 <ImageView
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:src="@drawable/ic_user"
-                    android:layout_marginBottom="2dp"
+                    android:layout_marginBottom="0dp"
                     app:tint="#000000" />
 
                 <TextView
@@ -230,6 +230,33 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="за залишковою сумою"/>
+        </RadioGroup>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Напрям сортування"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="4dp"/>
+
+        <RadioGroup
+            android:id="@+id/sort_order_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RadioButton
+                android:id="@+id/sort_order_asc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="А-Я (зростання)"
+                android:checked="true" />
+
+            <RadioButton
+                android:id="@+id/sort_order_desc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Я-А (спадання)" />
         </RadioGroup>
     </LinearLayout>
 

@@ -8,7 +8,7 @@ import retrofit2.http.*
 import retrofit2.Response
 
 object RetrofitClient {
-    private const val BASE_URL = "https://249a-176-37-228-210.ngrok-free.app/"
+    private const val BASE_URL = "https://52fe-176-37-228-210.ngrok-free.app/"
 
     private val logger = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY

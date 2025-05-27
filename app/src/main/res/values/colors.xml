@@ -3,4 +3,12 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="checkbox_blue">#002D85</color> <!-- твій корпоративний синій -->
+    <!-- Світло-сірий фон для заглушок, блоків тощо -->
+    <color name="light_gray">#F1F1F1</color>
+
+    <!-- Основний помаранчевий (як у вашому дизайні) -->
+    <color name="primary">#FFA500</color>
+
+    <!-- Насичений червоний для кнопки "Поскаржитись" -->
+    <color name="red">#B00020</color>
 </resources>

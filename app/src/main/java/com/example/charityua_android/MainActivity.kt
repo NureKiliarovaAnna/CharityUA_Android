@@ -27,6 +27,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var categoriesContainer: LinearLayout
     private lateinit var sortOptions: RadioGroup
     private lateinit var sortLabel: TextView
+    private lateinit var sortOrderGroup: RadioGroup
 
     // Категорії — за бажанням можна завантажити з API
     private val availableCategories = listOf("Медицина", "Армія", "Тварини", "Гуманітарна допомога", "Освіта", "Інше")
@@ -53,6 +54,13 @@ class MainActivity : AppCompatActivity() {
         sortByDate.buttonTintList = blueColor
         sortByRemaining.buttonTintList = blueColor
 
+        sortOrderGroup = findViewById(R.id.sort_order_group)
+
+        val asc = findViewById<RadioButton>(R.id.sort_order_asc)
+        val desc = findViewById<RadioButton>(R.id.sort_order_desc)
+        asc.buttonTintList = blueColor
+        desc.buttonTintList = blueColor
+
         // Динамічно додаємо чекбокси для категорій
         setupCategoryCheckboxes()
 
@@ -73,7 +81,10 @@ class MainActivity : AppCompatActivity() {
             val checkBox = CheckBox(this)
             checkBox.text = name
             checkBox.setTextColor(getColor(android.R.color.black))
-            checkBox.setOnCheckedChangeListener { _, _ -> updateFilterSummary() }
+            checkBox.setOnCheckedChangeListener { _, _ ->
+                updateFilterSummary()
+                applyFilters() // 🔹 ОНОВЛЕННЯ
+            }
             categoriesContainer.addView(checkBox)
         }
     }
@@ -102,6 +113,11 @@ class MainActivity : AppCompatActivity() {
             applyFilters()
         }
 
+        sortOrderGroup.setOnCheckedChangeListener { _, _ ->
+            updateSortLabel()
+            applyFilters() // 🔹 Тепер сортування оновлюється при виборі напрямку
+        }
+
         resetFiltersButton.setOnClickListener {
             filterAlmostFinished.isChecked = false
 
@@ -116,9 +132,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun applyFilters() {
-        val currentFundraisers = allFundraisers
-        if (currentFundraisers == null) return
-
         val selectedCategories = mutableListOf<String>()
         for (i in 0 until categoriesContainer.childCount) {
             val view = categoriesContainer.getChildAt(i)
@@ -127,7 +140,8 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        val filtered = currentFundraisers.filter { fundraiser ->
+        // Фільтрація
+        var filtered = allFundraisers.filter { fundraiser ->
             val isAlmostFinished = if (filterAlmostFinished.isChecked) {
                 val percent = fundraiser.current_amount.toDouble() / fundraiser.goal_amount
                 percent >= 0.9
@@ -138,6 +152,24 @@ class MainActivity : AppCompatActivity() {
             } else true
 
             isAlmostFinished && matchesCategory
+        }
+
+        // Сортування
+        val sortTypeId = sortOptions.checkedRadioButtonId
+        val sortOrderId = sortOrderGroup.checkedRadioButtonId
+
+        val ascending = (sortOrderId == R.id.sort_order_asc)
+
+        filtered = when (sortTypeId) {
+            R.id.sort_by_date -> {
+                if (ascending) filtered.sortedBy { it.created_at }
+                else filtered.sortedByDescending { it.created_at }
+            }
+            R.id.sort_by_remaining -> {
+                if (ascending) filtered.sortedBy { it.goal_amount - it.current_amount }
+                else filtered.sortedByDescending { it.goal_amount - it.current_amount }
+            }
+            else -> filtered
         }
 
         adapter = FundraiserAdapter(filtered) {
@@ -172,10 +204,9 @@ class MainActivity : AppCompatActivity() {
                 val response = RetrofitClient.instance.getActiveFundraisers()
                 if (response.isSuccessful && response.body() != null) {
                     allFundraisers = response.body()!!.filter { it.status == "active" }
-                    adapter = FundraiserAdapter(allFundraisers) {
-                        Toast.makeText(this@MainActivity, "Деталі: ${it.title}", Toast.LENGTH_SHORT).show()
-                    }
-                    binding.fundraisersRecycler.adapter = adapter
+
+                    // 🔹 Застосовуємо сортування і фільтрування одразу
+                    applyFilters()
                 } else {
                     Toast.makeText(this@MainActivity, "Помилка сервера: ${response.code()}", Toast.LENGTH_SHORT).show()
                 }
