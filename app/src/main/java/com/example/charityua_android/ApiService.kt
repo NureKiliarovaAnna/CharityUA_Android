@@ -30,6 +30,9 @@ interface ApiService {
     @POST("/donate")
     suspend fun postDonation(@Body request: DonationRequest): Response<Unit>
 
+    @POST("/complaints")
+    suspend fun submitComplaint(@Body request: ComplaintRequest): Response<Void>
+
     @GET("/me")
     suspend fun getProfile(@Header("Authorization") token: String): Response<UserProfile>
 

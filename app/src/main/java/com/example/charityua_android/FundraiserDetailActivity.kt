@@ -39,9 +39,15 @@ class FundraiserDetailActivity : AppCompatActivity() {
             toggleFavorite(false)
         }
 
-        binding.reportButton.setOnClickListener {
-            Toast.makeText(this, "Скаргу відправлено", Toast.LENGTH_SHORT).show()
-            // TODO: виклик API скарги
+        binding.complaintButton.setOnClickListener {
+            val fundraiser = currentFundraiser
+
+            ComplaintBottomSheet(
+                fundraiserId = fundraiser.fundraiser_id,
+                onSuccess = {
+                    Toast.makeText(this, "Скаргу надіслано", Toast.LENGTH_SHORT).show()
+                }
+            ).show(supportFragmentManager, "ComplaintBottomSheet")
         }
 
         binding.donateButton.setOnClickListener {
