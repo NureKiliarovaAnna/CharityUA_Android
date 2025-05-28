@@ -1,177 +1,238 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/scrollView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
+    android:background="@color/primary">
 
     <LinearLayout
-        android:id="@+id/detail_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="12dp"
+        android:background="@color/primary">
 
-        <!-- Назва -->
-        <TextView
-            android:id="@+id/fundraiser_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Назва збору"
-            android:textStyle="bold"
-            android:textSize="20sp"
-            android:paddingBottom="8dp"/>
-
-        <!-- Фото -->
-        <ImageView
-            android:id="@+id/fundraiser_image"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:scaleType="centerCrop"
-            android:background="@color/light_gray" />
-
-        <!-- Статистика -->
+        <!-- Білий блок -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="2"
-            android:paddingTop="16dp">
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:background="@drawable/rounded_white_background"
+            android:elevation="4dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp"
+            android:layout_marginHorizontal="4dp">
 
-            <LinearLayout
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView android:text="Зібрано:"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textStyle="bold"/>
-                <TextView android:id="@+id/fundraiser_current_amount"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView android:text="Ціль:"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textStyle="bold"/>
-                <TextView android:id="@+id/fundraiser_goal_amount"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-            </LinearLayout>
-        </LinearLayout>
-
-        <!-- Організатор -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingTop="16dp"
-            android:gravity="center_vertical">
-
-            <ImageView
-                android:id="@+id/organizer_avatar"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:src="@drawable/avatar_placeholder"
-                android:scaleType="centerCrop"
-                android:background="@drawable/circle_button_background"/>
-
+            <!-- Назва -->
             <TextView
-                android:id="@+id/organizer_name"
+                android:id="@+id/fundraiser_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Назва збору"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:layout_marginBottom="12dp" />
+
+            <!-- ViewPager для фото -->
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/fundraiser_images_pager"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginBottom="12dp" />
+
+            <!-- Розділювач -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/light_gray" />
+
+            <!-- Статистика -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="12dp"
+                android:gravity="center_vertical">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView android:text="Зібрано:"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold" />
+                    <TextView android:id="@+id/fundraiser_current_amount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView android:text="Ціль:"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold" />
+                    <TextView android:id="@+id/fundraiser_goal_amount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Організатор + Кнопка -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="12dp"
+                android:gravity="center_vertical">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:id="@+id/organizer_avatar"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/avatar_placeholder"
+                        android:scaleType="centerCrop"
+                        android:background="@drawable/circle_button_background" />
+
+                    <TextView
+                        android:id="@+id/organizer_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:text="Сергій Притула"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/donate_button"
+                    android:layout_width="170dp"
+                    android:layout_height="60dp"
+                    android:text="ЗАДОНАТИТИ"
+                    android:textSize="18dp"
+                    android:backgroundTint="@color/checkbox_blue"
+                    android:textColor="@color/white"
+                    android:layout_marginStart="12dp" />
+            </LinearLayout>
+
+            <!-- Обране -->
+            <LinearLayout
+                android:id="@+id/favorite_toggle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:text="Організатор"
-                android:textStyle="bold" />
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginTop="12dp">
+
+                <ImageView
+                    android:id="@+id/favorite_icon_outline"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:src="@drawable/ic_heart_outline"
+                    android:visibility="visible" />
+
+                <ImageView
+                    android:id="@+id/favorite_icon_filled"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:src="@drawable/ic_heart_filled"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Додати в обране"
+                    android:layout_marginStart="8dp" />
+            </LinearLayout>
+
+            <!-- Розділювач -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="16dp"
+                android:background="@color/light_gray" />
+
+            <!-- Опис -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Опис збору"
+                android:textStyle="bold"
+                android:layout_marginTop="16dp" />
+
+            <TextView
+                android:id="@+id/fundraiser_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp" />
+
+            <!-- Розділювач -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="16dp"
+                android:background="@color/light_gray" />
+
+            <!-- Поскаржитись -->
+            <Button
+                android:id="@+id/report_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="⚠️ Поскаржитись"
+                android:layout_marginTop="16dp"
+                android:backgroundTint="@color/red"
+                android:textColor="@color/white" />
+
+            <!-- Розділювач -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="16dp"
+                android:background="@color/light_gray" />
+
+            <!-- Поділитись -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Поділитись:"
+                android:textStyle="bold"
+                android:layout_marginTop="16dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginTop="8dp">
+
+                <ImageView android:src="@drawable/ic_facebook" android:layout_width="36dp" android:layout_height="36dp" />
+                <ImageView android:src="@drawable/ic_instagram" android:layout_width="36dp" android:layout_height="36dp" android:layout_marginStart="16dp" />
+                <ImageView android:src="@drawable/ic_telegram" android:layout_width="36dp" android:layout_height="36dp" android:layout_marginStart="16dp" />
+            </LinearLayout>
+
+            <!-- Чат -->
+            <Button
+                android:id="@+id/chat_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Написати організатору"
+                android:textColor="@color/white"
+                android:backgroundTint="@color/primary"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"/>
         </LinearLayout>
-
-        <!-- Кнопка -->
-        <Button
-            android:id="@+id/donate_button"
-            android:text="ЗАДОНАТИТИ"
-            android:layout_marginTop="12dp"
-            android:backgroundTint="@color/checkbox_blue"
-            android:textColor="@color/white"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
-        <!-- Обране -->
-        <FrameLayout
-            android:id="@+id/favorite_toggle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp">
-
-            <ImageView
-                android:id="@+id/favorite_icon_outline"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:src="@drawable/ic_heart_outline"
-                android:contentDescription="Додати в обране"
-                android:visibility="visible"/>
-
-            <ImageView
-                android:id="@+id/favorite_icon_filled"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:src="@drawable/ic_heart_filled"
-                android:contentDescription="В обраному"
-                android:visibility="gone"/>
-        </FrameLayout>
-
-        <!-- Опис -->
-        <TextView
-            android:text="Опис збору"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:layout_marginTop="24dp"/>
-        <TextView
-            android:id="@+id/fundraiser_description"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"/>
-
-        <!-- Поскаржитись -->
-        <Button
-            android:id="@+id/report_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="⚠️ Поскаржитись"
-            android:layout_marginTop="16dp"
-            android:backgroundTint="@color/red"
-            android:textColor="@color/white"/>
-
-        <!-- Соцмережі -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp">
-
-            <ImageView android:src="@drawable/ic_facebook" android:layout_width="45dp" android:layout_height="45dp"/>
-            <ImageView android:src="@drawable/ic_instagram" android:layout_width="45dp" android:layout_height="45dp" android:layout_marginStart="16dp"/>
-            <ImageView android:src="@drawable/ic_telegram" android:layout_width="45dp" android:layout_height="45dp" android:layout_marginStart="16dp"/>
-        </LinearLayout>
-
-        <Button
-            android:id="@+id/chat_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Написати організатору"
-            android:layout_marginTop="12dp"
-            android:backgroundTint="@color/primary"
-            android:textColor="@color/white"/>
     </LinearLayout>
 </ScrollView>

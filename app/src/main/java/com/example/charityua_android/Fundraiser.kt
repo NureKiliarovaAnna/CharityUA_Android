@@ -1,15 +1,17 @@
 package com.example.charityua_android
 
+import com.google.gson.annotations.SerializedName
+
 data class Fundraiser(
-    val fundraiser_id: Int,
+    @SerializedName("fundraiser_id") val fundraiser_id: Int,
     val title: String,
     val description: String,
-    val goal_amount: Int,
-    val current_amount: Int,
+    @SerializedName("goal_amount") val goal_amount: Double,
+    @SerializedName("current_amount") val current_amount: Double,
     val status: String,
-    val media_urls: List<String>,
-    val created_at: String,
-    val category_id: Int,
-    val category_name: String,
-    val organizer_name: String
+    @SerializedName("media_urls") val media_urls: List<String>,
+    @SerializedName("created_at") val created_at: String,
+    @SerializedName("category_id") val category_id: Int,
+    @SerializedName("category_name") val category_name: String,
+    @SerializedName("organizer_name") val organizer_name: String
 )

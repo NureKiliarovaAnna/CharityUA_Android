@@ -1,5 +1,6 @@
 package com.example.charityua_android
 
+import android.content.Intent
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
@@ -36,13 +37,11 @@ class FundraiserAdapter(
     override fun onBindViewHolder(holder: FundraiserViewHolder, position: Int) {
         val fundraiser = fundraisers[position]
 
-        // Основна інформація
         holder.title.text = fundraiser.title
         holder.deadline.text = fundraiser.created_at.take(10)
         holder.raised.text = fundraiser.current_amount.toString()
         holder.goal.text = fundraiser.goal_amount.toString()
 
-        // Зображення
         val imageUrl = fundraiser.media_urls.firstOrNull()
         if (imageUrl != null) {
             Glide.with(holder.itemView.context)
@@ -54,29 +53,30 @@ class FundraiserAdapter(
         }
 
         // Прогрес у відсотках
-        val progressPercent = (fundraiser.current_amount * 100 / fundraiser.goal_amount).coerceAtMost(100)
+        val progressPercent = ((fundraiser.current_amount * 100) / fundraiser.goal_amount).toInt().coerceAtMost(100)
         holder.progressBar.progress = progressPercent
         holder.percentText.text = "Прогрес: $progressPercent%"
 
-        // Обчислення, чи залишилось менше 10%
+        // Якщо залишилось менше 10% до цілі
         val left = fundraiser.goal_amount - fundraiser.current_amount
         val percentageLeft = left.toDouble() / fundraiser.goal_amount
 
         if (percentageLeft < 0.1 && progressPercent < 100) {
-            // Залишилось <10% до цілі — ВИДІЛИТИ
-            holder.summarySection.setBackgroundColor(Color.parseColor("#C8FAD0"))  // світло-зелений
-            holder.button.setBackgroundColor(Color.parseColor("#B00020"))          // червоний
+            holder.summarySection.setBackgroundColor(Color.parseColor("#C8FAD0"))
+            holder.button.setBackgroundColor(Color.parseColor("#B00020"))
             holder.button.text = "ЗАВЕРШУЄТЬСЯ"
         } else {
-            // Стандартний вигляд
-            holder.summarySection.setBackgroundColor(Color.parseColor("#F1F1F1"))  // сірий
-            holder.button.setBackgroundColor(Color.parseColor("#002D85"))          // синій
+            holder.summarySection.setBackgroundColor(Color.parseColor("#F1F1F1"))
+            holder.button.setBackgroundColor(Color.parseColor("#002D85"))
             holder.button.text = "ДЕТАЛЬНІШЕ"
         }
 
-        // Кнопка
+        // Відкриття деталей збору
         holder.button.setOnClickListener {
-            onDetailsClick(fundraiser)
+            val context = holder.itemView.context
+            val intent = Intent(context, FundraiserDetailActivity::class.java)
+            intent.putExtra("fundraiser_id", fundraiser.fundraiser_id) // ✅ виправлений ключ
+            context.startActivity(intent)
         }
     }
 }

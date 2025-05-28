@@ -24,6 +24,12 @@ interface ApiService {
     @GET("/public/fundraisers/active")
     suspend fun getActiveFundraisers(): Response<List<Fundraiser>>
 
+    @GET("public/fundraisers/{id}")
+    suspend fun getFundraiserById(@Path("id") id: Int): Response<Fundraiser>
+
+    @POST("/donate")
+    suspend fun postDonation(@Body request: DonationRequest): Response<Unit>
+
     @GET("/me")
     suspend fun getProfile(@Header("Authorization") token: String): Response<UserProfile>
 

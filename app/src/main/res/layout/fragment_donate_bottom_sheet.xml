@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/white"
+        android:padding="16dp"
+        android:layout_margin="12dp"
+        android:elevation="4dp"
+        android:backgroundTint="@color/white">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Оплата"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:layout_marginBottom="12dp" />
+
+        <EditText
+            android:id="@+id/card_number_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Номер картки"
+            android:inputType="number"
+            android:maxLength="16"
+            android:background="@drawable/edittext_border"
+            android:minHeight="48dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="12dp"
+            android:weightSum="2">
+
+            <EditText
+                android:id="@+id/card_expiry_input"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="01/35"
+                android:maxLength="5"
+                android:background="@drawable/edittext_border"
+                android:inputType="text"
+                android:minHeight="48dp"/>
+
+            <Space
+                android:layout_width="12dp"
+                android:layout_height="wrap_content" />
+
+            <EditText
+                android:id="@+id/card_cvv_input"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="CVV"
+                android:maxLength="3"
+                android:inputType="numberPassword"
+                android:background="@drawable/edittext_border"
+                android:minHeight="48dp"/>
+        </LinearLayout>
+
+        <TextView
+            android:layout_marginTop="16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Сума донату"
+            android:textSize="16dp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp"/>
+
+        <EditText
+            android:id="@+id/amount_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:hint="0"
+            android:background="@drawable/edittext_border"
+            android:layout_marginBottom="8dp"
+            android:minHeight="48dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/button_100"
+                android:text="100"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:textStyle="bold"
+                android:textSize="16dp"
+                android:backgroundTint="@color/primary"
+                android:textColor="@color/white" />
+
+            <Button
+                android:id="@+id/button_200"
+                android:text="200"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:textStyle="bold"
+                android:textSize="16dp"
+                android:backgroundTint="@color/primary"
+                android:textColor="@color/white" />
+
+            <Button
+                android:id="@+id/button_500"
+                android:text="500"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="16dp"
+                android:backgroundTint="@color/primary"
+                android:textColor="@color/white" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginTop="24dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <Button
+                android:id="@+id/cancel_button"
+                android:text="Скасувати"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="56dp"
+                android:textSize="16dp"
+                android:textColor="@color/black"
+                android:backgroundTint="@color/light_gray" />
+
+            <Space android:layout_width="12dp" android:layout_height="wrap_content"/>
+
+            <Button
+                android:id="@+id/confirm_button"
+                android:text="Підтвердити"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="56dp"
+                android:textStyle="bold"
+                android:textSize="16dp"
+                android:backgroundTint="@color/checkbox_blue"
+                android:textColor="@color/white" />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

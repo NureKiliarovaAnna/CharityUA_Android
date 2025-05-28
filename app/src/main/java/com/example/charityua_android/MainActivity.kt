@@ -1,9 +1,10 @@
 package com.example.charityua_android
 
+import android.content.Intent
 import android.os.Bundle
-import android.view.Gravity
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.lifecycleScope
@@ -12,7 +13,6 @@ import com.example.charityua_android.databinding.ActivityMainBinding
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
-import androidx.core.content.ContextCompat
 
 class MainActivity : AppCompatActivity() {
 
@@ -29,7 +29,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var sortLabel: TextView
     private lateinit var sortOrderGroup: RadioGroup
 
-    // Категорії — за бажанням можна завантажити з API
     private val availableCategories = listOf("Медицина", "Армія", "Тварини", "Гуманітарна допомога", "Освіта", "Інше")
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,19 +60,18 @@ class MainActivity : AppCompatActivity() {
         asc.buttonTintList = blueColor
         desc.buttonTintList = blueColor
 
-        // Динамічно додаємо чекбокси для категорій
         setupCategoryCheckboxes()
+        setupDrawerTriggers()
+        setupFilterLogic()
 
         adapter = FundraiserAdapter(listOf()) {
-            Toast.makeText(this, "Вибрано: ${it.title}", Toast.LENGTH_SHORT).show()
+            openFundraiserDetails(it.fundraiser_id)
         }
 
         binding.fundraisersRecycler.layoutManager = LinearLayoutManager(this)
         binding.fundraisersRecycler.adapter = adapter
 
         loadFundraisers()
-        setupDrawerTriggers()
-        setupFilterLogic()
     }
 
     private fun setupCategoryCheckboxes() {
@@ -83,7 +81,7 @@ class MainActivity : AppCompatActivity() {
             checkBox.setTextColor(getColor(android.R.color.black))
             checkBox.setOnCheckedChangeListener { _, _ ->
                 updateFilterSummary()
-                applyFilters() // 🔹 ОНОВЛЕННЯ
+                applyFilters()
             }
             categoriesContainer.addView(checkBox)
         }
@@ -115,7 +113,7 @@ class MainActivity : AppCompatActivity() {
 
         sortOrderGroup.setOnCheckedChangeListener { _, _ ->
             updateSortLabel()
-            applyFilters() // 🔹 Тепер сортування оновлюється при виборі напрямку
+            applyFilters()
         }
 
         resetFiltersButton.setOnClickListener {
@@ -140,7 +138,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        // Фільтрація
         var filtered = allFundraisers.filter { fundraiser ->
             val isAlmostFinished = if (filterAlmostFinished.isChecked) {
                 val percent = fundraiser.current_amount.toDouble() / fundraiser.goal_amount
@@ -154,7 +151,6 @@ class MainActivity : AppCompatActivity() {
             isAlmostFinished && matchesCategory
         }
 
-        // Сортування
         val sortTypeId = sortOptions.checkedRadioButtonId
         val sortOrderId = sortOrderGroup.checkedRadioButtonId
 
@@ -173,7 +169,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         adapter = FundraiserAdapter(filtered) {
-            Toast.makeText(this, "Деталі: ${it.title}", Toast.LENGTH_SHORT).show()
+            openFundraiserDetails(it.fundraiser_id)
         }
         binding.fundraisersRecycler.adapter = adapter
 
@@ -204,8 +200,6 @@ class MainActivity : AppCompatActivity() {
                 val response = RetrofitClient.instance.getActiveFundraisers()
                 if (response.isSuccessful && response.body() != null) {
                     allFundraisers = response.body()!!.filter { it.status == "active" }
-
-                    // 🔹 Застосовуємо сортування і фільтрування одразу
                     applyFilters()
                 } else {
                     Toast.makeText(this@MainActivity, "Помилка сервера: ${response.code()}", Toast.LENGTH_SHORT).show()
@@ -216,5 +210,11 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this@MainActivity, "HTTP помилка: ${e.message}", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    private fun openFundraiserDetails(fundraiserId: Int) {
+        val intent = Intent(this, FundraiserDetailActivity::class.java)
+        intent.putExtra("fundraiserId", fundraiserId)
+        startActivity(intent)
     }
 }

@@ -27,6 +27,8 @@
         <activity android:name=".MainActivity" />
         <activity android:name=".ForgotPasswordActivity" />
         <activity android:name=".ResetPasswordActivity" />
+        <activity android:name=".FundraiserDetailActivity"/>
+        <activity android:name=".BottomSheetDialogFragment"/>
     </application>
 
 </manifest>
