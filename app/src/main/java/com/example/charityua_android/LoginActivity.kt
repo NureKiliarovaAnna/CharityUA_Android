@@ -43,10 +43,7 @@ class LoginActivity : AppCompatActivity() {
                     val response = RetrofitClient.instance.login(LoginRequest(email, password))
                     if (response.isSuccessful) {
                         val token = response.body()?.token ?: ""
-                        getSharedPreferences("auth", Context.MODE_PRIVATE)
-                            .edit()
-                            .putString("jwt_token", token)
-                            .apply()
+                        TokenManager.saveToken(this@LoginActivity, token)
 
                         loginError.visibility = TextView.GONE
                         Toast.makeText(this@LoginActivity, "Вхід успішний", Toast.LENGTH_SHORT).show()

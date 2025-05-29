@@ -8,14 +8,27 @@ import retrofit2.http.*
 import retrofit2.Response
 
 object RetrofitClient {
-    private const val BASE_URL = "https://7cf8-176-37-228-210.ngrok-free.app/"
-
-    private val logger = HttpLoggingInterceptor().apply {
-        level = HttpLoggingInterceptor.Level.BODY
-    }
+    private const val BASE_URL = "https://d030-176-37-228-210.ngrok-free.app/"
 
     private val client = OkHttpClient.Builder()
-        .addInterceptor(logger)
+        .addInterceptor { chain ->
+            val originalRequest = chain.request()
+            val context = MyApplication.instance.applicationContext
+            val token = TokenManager.getToken(context)
+
+            val modifiedRequest = if (!token.isNullOrEmpty()) {
+                originalRequest.newBuilder()
+                    .addHeader("Authorization", "Bearer $token")
+                    .build()
+            } else {
+                originalRequest
+            }
+
+            chain.proceed(modifiedRequest)
+        }
+        .addInterceptor(HttpLoggingInterceptor().apply {
+            level = HttpLoggingInterceptor.Level.BODY
+        })
         .build()
 
     val instance: ApiService by lazy {
