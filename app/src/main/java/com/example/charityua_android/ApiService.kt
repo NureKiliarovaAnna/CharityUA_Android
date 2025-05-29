@@ -35,6 +35,15 @@ interface ApiService {
     @GET("/categories")
     suspend fun getCategories(): Response<List<Category>>
 
-    @GET("/donations")
-    suspend fun getMyDonations(@Header("Authorization") token: String): Response<List<DonationWithFundraiser>>
+    @GET("/donations/my")
+    suspend fun getMyDonations(): Response<List<DonationWithFundraiser>>
+
+    @GET("/favorites")
+    suspend fun getFavorites(): Response<List<Fundraiser>>
+
+    @POST("/favorites")
+    suspend fun addFavorite(@Body request: FavoriteRequest): Response<Fundraiser>
+
+    @DELETE("/favorites/{fundraiserId}")
+    suspend fun removeFavorite(@Path("fundraiserId") fundraiserId: Int): Response<Void>
 }

@@ -29,6 +29,9 @@
         <activity android:name=".ForgotPasswordActivity" />
         <activity android:name=".ResetPasswordActivity" />
         <activity android:name=".FundraiserDetailActivity"/>
+        <activity android:name=".ProfileActivity" />
+        <activity android:name=".HistoryDonationsActivity" />
+        <activity android:name=".FavoritesActivity" />
     </application>
 
 </manifest>

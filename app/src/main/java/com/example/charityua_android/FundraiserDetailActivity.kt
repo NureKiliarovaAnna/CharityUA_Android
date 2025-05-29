@@ -104,16 +104,49 @@ class FundraiserDetailActivity : AppCompatActivity() {
     }
 
     private fun toggleFavorite(toFavorite: Boolean) {
+        val token = TokenManager.getToken(this)
+        if (token.isNullOrEmpty()) {
+            Toast.makeText(this, "Потрібно увійти", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         if (toFavorite) {
+            // ДОДАТИ ДО ОБРАНОГО
             binding.favoriteIconOutline.visibility = View.GONE
             binding.favoriteIconFilled.visibility = View.VISIBLE
-            Toast.makeText(this, "Додано в обране", Toast.LENGTH_SHORT).show()
-            // TODO: POST /favorites
+
+            val request = FavoriteRequest(fundraiser_id = currentFundraiser.fundraiser_id)
+
+            lifecycleScope.launch {
+                try {
+                    val response = RetrofitClient.instance.addFavorite(request)
+                    if (response.isSuccessful) {
+                        Toast.makeText(this@FundraiserDetailActivity, "Додано в обране", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(this@FundraiserDetailActivity, "Не вдалося додати", Toast.LENGTH_SHORT).show()
+                    }
+                } catch (e: Exception) {
+                    Toast.makeText(this@FundraiserDetailActivity, "Помилка з’єднання", Toast.LENGTH_SHORT).show()
+                }
+            }
+
         } else {
+            // ВИДАЛИТИ З ОБРАНОГО
             binding.favoriteIconOutline.visibility = View.VISIBLE
             binding.favoriteIconFilled.visibility = View.GONE
-            Toast.makeText(this, "Видалено з обраного", Toast.LENGTH_SHORT).show()
-            // TODO: DELETE /favorites/:id
+
+            lifecycleScope.launch {
+                try {
+                    val response = RetrofitClient.instance.removeFavorite(currentFundraiser.fundraiser_id)
+                    if (response.isSuccessful) {
+                        Toast.makeText(this@FundraiserDetailActivity, "Видалено з обраного", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(this@FundraiserDetailActivity, "Не вдалося видалити", Toast.LENGTH_SHORT).show()
+                    }
+                } catch (e: Exception) {
+                    Toast.makeText(this@FundraiserDetailActivity, "Помилка з’єднання", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
     }
 }

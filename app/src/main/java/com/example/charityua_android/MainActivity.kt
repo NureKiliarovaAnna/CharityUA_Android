@@ -68,6 +68,11 @@ class MainActivity : AppCompatActivity() {
             openFundraiserDetails(it.fundraiser_id)
         }
 
+        findViewById<LinearLayout>(R.id.nav_profile).setOnClickListener {
+            startActivity(Intent(this, ProfileActivity::class.java))
+            finish()
+        }
+
         binding.fundraisersRecycler.layoutManager = LinearLayoutManager(this)
         binding.fundraisersRecycler.adapter = adapter
 

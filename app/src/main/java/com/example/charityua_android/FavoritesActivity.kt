@@ -10,22 +10,22 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.launch
 
-class HistoryDonationsActivity : AppCompatActivity() {
+class FavoritesActivity : AppCompatActivity() {
 
     private lateinit var recyclerView: RecyclerView
-    private lateinit var adapter: DonationAdapter
+    private lateinit var adapter: FundraiserAdapter
     private lateinit var emptyText: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_history_donations)
+        setContentView(R.layout.activity_favorites)
 
-        recyclerView = findViewById(R.id.donationsRecycler)
+        recyclerView = findViewById(R.id.favoritesRecycler)
         emptyText = findViewById(R.id.empty_text)
 
-        adapter = DonationAdapter { fundraiserId ->
+        adapter = FundraiserAdapter(listOf()) { fundraiser ->
             val intent = Intent(this, FundraiserDetailActivity::class.java)
-            intent.putExtra("fundraiser_id", fundraiserId)
+            intent.putExtra("fundraiser_id", fundraiser.fundraiser_id)
             startActivity(intent)
         }
 
@@ -34,22 +34,27 @@ class HistoryDonationsActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             try {
-                val response = RetrofitClient.instance.getMyDonations()
+                val response = RetrofitClient.instance.getFavorites()
                 if (response.isSuccessful && response.body() != null) {
-                    val donations = response.body()!!
-                    if (donations.isEmpty()) {
+                    val favorites = response.body()!!
+                    if (favorites.isEmpty()) {
                         emptyText.visibility = TextView.VISIBLE
                         recyclerView.visibility = RecyclerView.GONE
                     } else {
                         emptyText.visibility = TextView.GONE
                         recyclerView.visibility = RecyclerView.VISIBLE
-                        adapter.submitList(donations)
+                        adapter = FundraiserAdapter(favorites) { fundraiser ->
+                            val intent = Intent(this@FavoritesActivity, FundraiserDetailActivity::class.java)
+                            intent.putExtra("fundraiser_id", fundraiser.fundraiser_id)
+                            startActivity(intent)
+                        }
+                        recyclerView.adapter = adapter
                     }
                 } else {
-                    Toast.makeText(this@HistoryDonationsActivity, "Помилка завантаження", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@FavoritesActivity, "Помилка завантаження", Toast.LENGTH_SHORT).show()
                 }
             } catch (e: Exception) {
-                Toast.makeText(this@HistoryDonationsActivity, "Помилка з’єднання", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@FavoritesActivity, "Помилка з’єднання", Toast.LENGTH_SHORT).show()
             }
         }
     }
