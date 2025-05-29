@@ -1,9 +1,5 @@
 package com.example.charityua_android
 
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.http.*
 import retrofit2.Response
 
@@ -38,4 +34,7 @@ interface ApiService {
 
     @GET("/categories")
     suspend fun getCategories(): Response<List<Category>>
+
+    @GET("/donations")
+    suspend fun getMyDonations(@Header("Authorization") token: String): Response<List<DonationWithFundraiser>>
 }
