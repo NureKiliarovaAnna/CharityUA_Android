@@ -25,7 +25,7 @@ class ProfileActivity : AppCompatActivity() {
 
         // Кнопки профілю
         findViewById<Button>(R.id.account_button).setOnClickListener {
-            Toast.makeText(this, "Редагування профілю ще не реалізовано", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this, ProfileEditActivity::class.java))
         }
 
         findViewById<Button>(R.id.donations_button).setOnClickListener {
@@ -72,12 +72,27 @@ class ProfileActivity : AppCompatActivity() {
                 val response = RetrofitClient.instance.getProfile("Bearer $token")
                 if (response.isSuccessful && response.body() != null) {
                     val profile = response.body()!!
+
+                    // Показуємо ім’я
                     userName.text = profile.name
 
+                    // Показуємо аватар або дефолтну іконку
                     if (!profile.avatar_url.isNullOrEmpty()) {
                         Glide.with(this@ProfileActivity)
                             .load(profile.avatar_url)
                             .into(avatar)
+                    } else {
+                        avatar.setImageResource(R.drawable.avatar_placeholder)
+                    }
+
+                    // Зберігаємо дані для редагування профілю
+                    findViewById<Button>(R.id.account_button).setOnClickListener {
+                        val intent = Intent(this@ProfileActivity, ProfileEditActivity::class.java).apply {
+                            putExtra("name", profile.name)
+                            putExtra("email", profile.email)
+                            putExtra("avatar_url", profile.avatar_url)
+                        }
+                        startActivity(intent)
                     }
                 } else {
                     Toast.makeText(this@ProfileActivity, "Не вдалося завантажити профіль", Toast.LENGTH_SHORT).show()

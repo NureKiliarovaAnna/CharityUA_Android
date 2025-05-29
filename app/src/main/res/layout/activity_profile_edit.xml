@@ -1,6 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/scrollView"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:padding="16dp">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:paddingBottom="24dp">
+
+        <!-- Аватар -->
+        <ImageView
+            android:id="@+id/avatarImageView"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:src="@drawable/avatar_placeholder"
+            android:scaleType="centerCrop"
+            android:background="@drawable/circle_button_background"
+            android:layout_marginBottom="16dp" />
+
+        <Button
+            android:id="@+id/changeAvatarButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Змінити аватар"
+            android:textAllCaps="false"
+            android:layout_marginBottom="24dp" />
+
+        <!-- Ім'я -->
+        <EditText
+            android:id="@+id/nameEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Ім’я"
+            android:inputType="textPersonName"
+            android:layout_marginBottom="16dp"
+            android:minHeight="48dp" />
+
+        <!-- Email (лише для local) -->
+        <EditText
+            android:id="@+id/emailEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Email"
+            android:inputType="textEmailAddress"
+            android:layout_marginBottom="16dp"
+            android:minHeight="48dp"/>
+
+        <!-- Пароль (лише для local) -->
+        <EditText
+            android:id="@+id/passwordEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Новий пароль"
+            android:inputType="textPassword"
+            android:layout_marginBottom="24dp"
+            android:minHeight="48dp" />
+
+        <!-- Кнопка Зберегти -->
+        <Button
+            android:id="@+id/saveButton"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:text="Зберегти"
+            android:textAllCaps="false"
+            android:backgroundTint="@color/checkbox_blue" />
+    </LinearLayout>
+</ScrollView>

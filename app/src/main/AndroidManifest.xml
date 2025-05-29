@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
     <application
         android:name=".MyApplication"
@@ -32,6 +33,7 @@
         <activity android:name=".ProfileActivity" />
         <activity android:name=".HistoryDonationsActivity" />
         <activity android:name=".FavoritesActivity" />
+        <activity android:name=".ProfileEditActivity" />
     </application>
 
 </manifest>

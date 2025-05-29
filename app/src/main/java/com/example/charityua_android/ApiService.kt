@@ -2,6 +2,8 @@ package com.example.charityua_android
 
 import retrofit2.http.*
 import retrofit2.Response
+import okhttp3.RequestBody
+import okhttp3.MultipartBody
 
 interface ApiService {
 
@@ -46,4 +48,11 @@ interface ApiService {
 
     @DELETE("/favorites/{fundraiserId}")
     suspend fun removeFavorite(@Path("fundraiserId") fundraiserId: Int): Response<Void>
+
+    @Multipart
+    @PUT("/me")
+    suspend fun updateProfile(
+        @Header("Authorization") token: String,
+        @Body body: MultipartBody
+    ): Response<Void>
 }
