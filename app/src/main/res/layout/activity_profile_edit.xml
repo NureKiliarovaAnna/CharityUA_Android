@@ -51,9 +51,19 @@
             android:layout_marginBottom="16dp"
             android:minHeight="48dp"/>
 
-        <!-- Пароль (лише для local) -->
+        <!-- Поточний пароль -->
         <EditText
-            android:id="@+id/passwordEditText"
+            android:id="@+id/currentPasswordEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Поточний пароль"
+            android:inputType="textPassword"
+            android:layout_marginBottom="16dp"
+            android:minHeight="48dp" />
+
+        <!-- Новий пароль -->
+        <EditText
+            android:id="@+id/newPasswordEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Новий пароль"
@@ -61,13 +71,23 @@
             android:layout_marginBottom="24dp"
             android:minHeight="48dp" />
 
-        <!-- Кнопка Зберегти -->
+        <!-- Зберегти -->
         <Button
             android:id="@+id/saveButton"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:text="Зберегти"
             android:textAllCaps="false"
-            android:backgroundTint="@color/checkbox_blue" />
+            android:backgroundTint="@color/checkbox_blue"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Вийти -->
+        <Button
+            android:id="@+id/logoutButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Вийти"
+            android:textAllCaps="false"
+            android:backgroundTint="@color/red"/>
     </LinearLayout>
 </ScrollView>

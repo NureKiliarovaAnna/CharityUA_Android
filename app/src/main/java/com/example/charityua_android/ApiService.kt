@@ -4,6 +4,7 @@ import retrofit2.http.*
 import retrofit2.Response
 import okhttp3.RequestBody
 import okhttp3.MultipartBody
+import okhttp3.ResponseBody
 
 interface ApiService {
 
@@ -50,9 +51,9 @@ interface ApiService {
     suspend fun removeFavorite(@Path("fundraiserId") fundraiserId: Int): Response<Void>
 
     @Multipart
-    @PUT("/me")
+    @PUT("profile/mobile")
     suspend fun updateProfile(
         @Header("Authorization") token: String,
-        @Body body: MultipartBody
-    ): Response<Void>
+        @Part parts: List<MultipartBody.Part>
+    ): Response<ResponseBody>
 }

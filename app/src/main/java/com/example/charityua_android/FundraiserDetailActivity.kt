@@ -21,7 +21,7 @@ class FundraiserDetailActivity : AppCompatActivity() {
         setContentView(binding.root)
         binding.donateButton.isEnabled = false
 
-        // 🔧 Отримуємо ID збору з Intent (виправлений ключ)
+        // 🔧 Отримуємо ID збору з Intent
         fundraiserId = intent.getIntExtra("fundraiser_id", -1)
         if (fundraiserId == -1) {
             Toast.makeText(this, "Збір не знайдено", Toast.LENGTH_SHORT).show()
@@ -41,7 +41,6 @@ class FundraiserDetailActivity : AppCompatActivity() {
 
         binding.complaintButton.setOnClickListener {
             val fundraiser = currentFundraiser
-
             ComplaintBottomSheet(
                 fundraiserId = fundraiser.fundraiser_id,
                 onSuccess = {
@@ -51,35 +50,32 @@ class FundraiserDetailActivity : AppCompatActivity() {
         }
 
         binding.donateButton.setOnClickListener {
-            val fundraiser = currentFundraiser  // переконайся, що ця змінна доступна і заповнена
-
-            // Обрахунок залишку до цілі (перевірка, щоб не було від’ємного)
+            val fundraiser = currentFundraiser
             val remainingAmount = try {
                 fundraiser.goal_amount.toDouble() - fundraiser.current_amount.toDouble()
             } catch (e: Exception) {
                 0.0
             }.coerceAtLeast(0.0)
 
-            // Відкриття DonateBottomSheet
             DonateBottomSheet(
                 fundraiserId = fundraiser.fundraiser_id,
                 maxAmount = remainingAmount,
                 onSuccess = {
                     loadFundraiser()
-                    // 🔄 Якщо потрібно оновити UI після донату — тут
                     Toast.makeText(this, "Збір оновлено після донату", Toast.LENGTH_SHORT).show()
                 }
             ).show(supportFragmentManager, "DonateBottomSheet")
         }
     }
 
-    fun loadFundraiser() {
+    private fun loadFundraiser() {
         lifecycleScope.launch {
             try {
                 val response = RetrofitClient.instance.getFundraiserById(fundraiserId)
                 if (response.isSuccessful && response.body() != null) {
                     currentFundraiser = response.body()!!
                     bindData(currentFundraiser)
+                    checkIfFavorite()
                 } else {
                     Toast.makeText(this@FundraiserDetailActivity, "Збір не знайдено", Toast.LENGTH_SHORT).show()
                     finish()
@@ -103,6 +99,27 @@ class FundraiserDetailActivity : AppCompatActivity() {
         binding.donateButton.isEnabled = true
     }
 
+    private fun checkIfFavorite() {
+        lifecycleScope.launch {
+            try {
+                val favoritesResponse = RetrofitClient.instance.getFavorites()
+                if (favoritesResponse.isSuccessful && favoritesResponse.body() != null) {
+                    val favorites = favoritesResponse.body()!!
+                    val isFavorite = favorites.any { it.fundraiser_id == fundraiserId }
+                    if (isFavorite) {
+                        binding.favoriteIconOutline.visibility = View.GONE
+                        binding.favoriteIconFilled.visibility = View.VISIBLE
+                    } else {
+                        binding.favoriteIconOutline.visibility = View.VISIBLE
+                        binding.favoriteIconFilled.visibility = View.GONE
+                    }
+                }
+            } catch (e: Exception) {
+                Toast.makeText(this@FundraiserDetailActivity, "Помилка перевірки обраного", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
     private fun toggleFavorite(toFavorite: Boolean) {
         val token = TokenManager.getToken(this)
         if (token.isNullOrEmpty()) {
@@ -111,12 +128,10 @@ class FundraiserDetailActivity : AppCompatActivity() {
         }
 
         if (toFavorite) {
-            // ДОДАТИ ДО ОБРАНОГО
             binding.favoriteIconOutline.visibility = View.GONE
             binding.favoriteIconFilled.visibility = View.VISIBLE
 
             val request = FavoriteRequest(fundraiser_id = currentFundraiser.fundraiser_id)
-
             lifecycleScope.launch {
                 try {
                     val response = RetrofitClient.instance.addFavorite(request)
@@ -124,14 +139,16 @@ class FundraiserDetailActivity : AppCompatActivity() {
                         Toast.makeText(this@FundraiserDetailActivity, "Додано в обране", Toast.LENGTH_SHORT).show()
                     } else {
                         Toast.makeText(this@FundraiserDetailActivity, "Не вдалося додати", Toast.LENGTH_SHORT).show()
+                        binding.favoriteIconOutline.visibility = View.VISIBLE
+                        binding.favoriteIconFilled.visibility = View.GONE
                     }
                 } catch (e: Exception) {
                     Toast.makeText(this@FundraiserDetailActivity, "Помилка з’єднання", Toast.LENGTH_SHORT).show()
+                    binding.favoriteIconOutline.visibility = View.VISIBLE
+                    binding.favoriteIconFilled.visibility = View.GONE
                 }
             }
-
         } else {
-            // ВИДАЛИТИ З ОБРАНОГО
             binding.favoriteIconOutline.visibility = View.VISIBLE
             binding.favoriteIconFilled.visibility = View.GONE
 
@@ -142,9 +159,13 @@ class FundraiserDetailActivity : AppCompatActivity() {
                         Toast.makeText(this@FundraiserDetailActivity, "Видалено з обраного", Toast.LENGTH_SHORT).show()
                     } else {
                         Toast.makeText(this@FundraiserDetailActivity, "Не вдалося видалити", Toast.LENGTH_SHORT).show()
+                        binding.favoriteIconOutline.visibility = View.GONE
+                        binding.favoriteIconFilled.visibility = View.VISIBLE
                     }
                 } catch (e: Exception) {
                     Toast.makeText(this@FundraiserDetailActivity, "Помилка з’єднання", Toast.LENGTH_SHORT).show()
+                    binding.favoriteIconOutline.visibility = View.GONE
+                    binding.favoriteIconFilled.visibility = View.VISIBLE
                 }
             }
         }

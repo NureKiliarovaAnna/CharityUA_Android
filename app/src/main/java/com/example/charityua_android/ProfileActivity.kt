@@ -2,6 +2,7 @@ package com.example.charityua_android
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -20,13 +21,7 @@ class ProfileActivity : AppCompatActivity() {
         avatar = findViewById(R.id.avatar)
         userName = findViewById(R.id.user_name)
 
-        // Завантажити профіль
         loadProfile()
-
-        // Кнопки профілю
-        findViewById<Button>(R.id.account_button).setOnClickListener {
-            startActivity(Intent(this, ProfileEditActivity::class.java))
-        }
 
         findViewById<Button>(R.id.donations_button).setOnClickListener {
             startActivity(Intent(this, HistoryDonationsActivity::class.java))
@@ -48,7 +43,6 @@ class ProfileActivity : AppCompatActivity() {
             Toast.makeText(this, "Служба підтримки ще не реалізована", Toast.LENGTH_SHORT).show()
         }
 
-        // Нижнє меню
         findViewById<LinearLayout>(R.id.nav_home).setOnClickListener {
             startActivity(Intent(this, MainActivity::class.java))
             finish()
@@ -72,20 +66,21 @@ class ProfileActivity : AppCompatActivity() {
                 val response = RetrofitClient.instance.getProfile("Bearer $token")
                 if (response.isSuccessful && response.body() != null) {
                     val profile = response.body()!!
+                    Log.d("ProfileActivity", "Отримано профіль: $profile")
 
-                    // Показуємо ім’я
                     userName.text = profile.name
 
-                    // Показуємо аватар або дефолтну іконку
                     if (!profile.avatar_url.isNullOrEmpty()) {
+                        Log.d("ProfileActivity", "Avatar URL: ${profile.avatar_url}")
                         Glide.with(this@ProfileActivity)
                             .load(profile.avatar_url)
+                            .placeholder(R.drawable.avatar_placeholder)
+                            .circleCrop()
                             .into(avatar)
                     } else {
                         avatar.setImageResource(R.drawable.avatar_placeholder)
                     }
 
-                    // Зберігаємо дані для редагування профілю
                     findViewById<Button>(R.id.account_button).setOnClickListener {
                         val intent = Intent(this@ProfileActivity, ProfileEditActivity::class.java).apply {
                             putExtra("name", profile.name)
@@ -94,10 +89,15 @@ class ProfileActivity : AppCompatActivity() {
                         }
                         startActivity(intent)
                     }
+
                 } else {
+                    val code = response.code()
+                    val error = response.errorBody()?.string()
+                    Log.e("ProfileActivity", "Помилка профілю: code=$code, error=$error")
                     Toast.makeText(this@ProfileActivity, "Не вдалося завантажити профіль", Toast.LENGTH_SHORT).show()
                 }
             } catch (e: Exception) {
+                Log.e("ProfileActivity", "Exception: ${e.message}", e)
                 Toast.makeText(this@ProfileActivity, "Помилка з’єднання: ${e.message}", Toast.LENGTH_SHORT).show()
             }
         }
