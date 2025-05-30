@@ -79,6 +79,11 @@ class MainActivity : AppCompatActivity() {
         loadFundraisers()
     }
 
+    override fun onResume() {
+        super.onResume()
+        loadFundraisers()
+    }
+
     private fun setupCategoryCheckboxes() {
         availableCategories.forEach { name ->
             val checkBox = CheckBox(this)

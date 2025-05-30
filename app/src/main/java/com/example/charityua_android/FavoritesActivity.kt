@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 class FavoritesActivity : AppCompatActivity() {
 
     private lateinit var recyclerView: RecyclerView
-    private lateinit var adapter: FundraiserAdapter
+    private lateinit var adapter: FavoriteFundraiserAdapter
     private lateinit var emptyText: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,15 +23,24 @@ class FavoritesActivity : AppCompatActivity() {
         recyclerView = findViewById(R.id.favoritesRecycler)
         emptyText = findViewById(R.id.empty_text)
 
-        adapter = FundraiserAdapter(listOf()) { fundraiser ->
+        adapter = FavoriteFundraiserAdapter(listOf()) { fundraiserId ->
             val intent = Intent(this, FundraiserDetailActivity::class.java)
-            intent.putExtra("fundraiser_id", fundraiser.fundraiser_id)
+            intent.putExtra("fundraiser_id", fundraiserId)
             startActivity(intent)
         }
 
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
 
+        loadFavorites()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        loadFavorites()
+    }
+
+    private fun loadFavorites() {
         lifecycleScope.launch {
             try {
                 val response = RetrofitClient.instance.getFavorites()
@@ -43,9 +52,9 @@ class FavoritesActivity : AppCompatActivity() {
                     } else {
                         emptyText.visibility = TextView.GONE
                         recyclerView.visibility = RecyclerView.VISIBLE
-                        adapter = FundraiserAdapter(favorites) { fundraiser ->
+                        adapter = FavoriteFundraiserAdapter(favorites) { fundraiserId ->
                             val intent = Intent(this@FavoritesActivity, FundraiserDetailActivity::class.java)
-                            intent.putExtra("fundraiser_id", fundraiser.fundraiser_id)
+                            intent.putExtra("fundraiser_id", fundraiserId)
                             startActivity(intent)
                         }
                         recyclerView.adapter = adapter

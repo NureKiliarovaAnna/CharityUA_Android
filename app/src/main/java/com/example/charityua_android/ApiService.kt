@@ -41,8 +41,8 @@ interface ApiService {
     @GET("/donations/my")
     suspend fun getMyDonations(): Response<List<DonationWithFundraiser>>
 
-    @GET("/favorites")
-    suspend fun getFavorites(): Response<List<Fundraiser>>
+    @GET("favorites")
+    suspend fun getFavorites(): Response<List<FavoriteFundraiser>>
 
     @POST("/favorites")
     suspend fun addFavorite(@Body request: FavoriteRequest): Response<Fundraiser>
