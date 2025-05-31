@@ -56,4 +56,10 @@ interface ApiService {
         @Header("Authorization") token: String,
         @Part parts: List<MultipartBody.Part>
     ): Response<ResponseBody>
+
+    @POST("/api/liqpay/checkout")
+    suspend fun getLiqPayData(@Body request: LiqPayRequest): Response<LiqPayResponse>
+
+    @POST("/api/donation/success")
+    suspend fun postDonationSuccess(@Body request: DonationRequest): Response<Void>
 }

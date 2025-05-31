@@ -1,15 +1,21 @@
 package com.example.charityua_android
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import android.widget.Toast
 import com.example.charityua_android.databinding.FragmentDonateBottomSheetBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import android.content.Intent
+import android.net.Uri
+
 
 class DonateBottomSheet(
     private val fundraiserId: Int,
@@ -38,6 +44,7 @@ class DonateBottomSheet(
 
         binding.cancelButton.setOnClickListener { dismiss() }
 
+        // Оплата карткою
         binding.confirmButton.setOnClickListener {
             val cardNumber = binding.cardNumberInput.text.toString().trim()
             val expDate = binding.cardExpiryInput.text.toString().trim()
@@ -53,7 +60,6 @@ class DonateBottomSheet(
                 return@setOnClickListener
             }
 
-            // 🔄 Збереження імітації донату
             CoroutineScope(Dispatchers.Main).launch {
                 try {
                     val response = RetrofitClient.instance.postDonation(
@@ -71,6 +77,11 @@ class DonateBottomSheet(
                 }
             }
         }
+
+        // 🚀 Обробник LiqPay
+        binding.liqpayButton.setOnClickListener {
+            openLiqPay()
+        }
     }
 
     private fun setAmount(amount: Int) {
@@ -78,6 +89,59 @@ class DonateBottomSheet(
             binding.amountInput.setText(amount.toString())
         } else {
             Toast.makeText(requireContext(), "Сума перевищує максимум", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun openLiqPay() {
+        val amount = binding.amountInput.text.toString().toDoubleOrNull() ?: 0.0
+        if (amount <= 0) {
+            Toast.makeText(requireContext(), "Введіть коректну суму", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val currency = "UAH"
+        val description = "Тестовий донат у LiqPay"
+        val orderId = "order_test_${System.currentTimeMillis()}_${fundraiserId}"
+
+        CoroutineScope(Dispatchers.Main).launch {
+            try {
+                val response = RetrofitClient.instance.getLiqPayData(
+                    LiqPayRequest(amount, currency, description, orderId)
+                )
+                if (response.isSuccessful && response.body() != null) {
+                    val liqPayResponse = response.body()!!
+                    openLiqPayBrowser(liqPayResponse.data, liqPayResponse.signature)
+                } else {
+                    Toast.makeText(requireContext(), "Помилка LiqPay: ${response.code()}", Toast.LENGTH_SHORT).show()
+                }
+            } catch (e: Exception) {
+                Toast.makeText(requireContext(), "Помилка підключення", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun openLiqPayBrowser(data: String, signature: String) {
+        val backendRedirectUrl = " https://c81a-176-37-228-210.ngrok-free.app/liqpay/redirect?data=$data&signature=$signature"
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(backendRedirectUrl))
+        startActivity(intent)
+    }
+
+    private fun updateDonation(amount: Int) {
+        CoroutineScope(Dispatchers.Main).launch {
+            try {
+                val response = RetrofitClient.instance.postDonationSuccess(
+                    DonationRequest(fundraiser_id = fundraiserId, amount = amount)
+                )
+                if (response.isSuccessful) {
+                    Toast.makeText(requireContext(), "✅ Донат зараховано!", Toast.LENGTH_SHORT).show()
+                    onSuccess()
+                    dismiss()
+                } else {
+                    Toast.makeText(requireContext(), "❌ Помилка: ${response.code()}", Toast.LENGTH_SHORT).show()
+                }
+            } catch (e: Exception) {
+                Toast.makeText(requireContext(), "❌ Помилка підключення", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 

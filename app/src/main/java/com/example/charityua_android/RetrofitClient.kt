@@ -8,7 +8,7 @@ import retrofit2.http.*
 import retrofit2.Response
 
 object RetrofitClient {
-    private const val BASE_URL = "https://38b6-176-37-228-210.ngrok-free.app/"
+    private const val BASE_URL = " https://c81a-176-37-228-210.ngrok-free.app/"
 
     private val client = OkHttpClient.Builder()
         .addInterceptor { chain ->

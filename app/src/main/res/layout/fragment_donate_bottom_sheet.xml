@@ -14,14 +14,16 @@
         android:elevation="4dp"
         android:backgroundTint="@color/white">
 
+        <!-- 🔶 Стара форма картки (залишаємо для вибору користувача) -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Оплата"
+            android:text="Оплата карткою"
             android:textStyle="bold"
             android:textSize="20sp"
             android:layout_marginBottom="12dp" />
 
+        <!-- Поля для картки -->
         <EditText
             android:id="@+id/card_number_input"
             android:layout_width="match_parent"
@@ -42,8 +44,8 @@
             <EditText
                 android:id="@+id/card_expiry_input"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:layout_height="wrap_content"
                 android:hint="01/35"
                 android:maxLength="5"
                 android:background="@drawable/edittext_border"
@@ -57,8 +59,8 @@
             <EditText
                 android:id="@+id/card_cvv_input"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:layout_height="wrap_content"
                 android:hint="CVV"
                 android:maxLength="3"
                 android:inputType="numberPassword"
@@ -66,6 +68,7 @@
                 android:minHeight="48dp"/>
         </LinearLayout>
 
+        <!-- Сума донату -->
         <TextView
             android:layout_marginTop="16dp"
             android:layout_width="wrap_content"
@@ -85,6 +88,7 @@
             android:layout_marginBottom="8dp"
             android:minHeight="48dp"/>
 
+        <!-- Швидкі кнопки -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -127,6 +131,44 @@
                 android:textColor="@color/white" />
         </LinearLayout>
 
+        <!-- 🔶 LiqPay блок -->
+        <LinearLayout
+            android:layout_marginTop="24dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="8dp">
+
+            <ImageView
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/ic_liqpay" />
+
+            <Space
+                android:layout_width="8dp"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Оплата через LiqPay"
+                android:textStyle="bold"
+                android:textSize="20sp" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/liqpay_button"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="Оплатити через LiqPay"
+            android:drawableStart="@drawable/ic_liqpay"
+            android:backgroundTint="@color/black"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:drawablePadding="8dp"/>
+
+        <!-- Кнопки Скасувати та Підтвердити -->
         <LinearLayout
             android:layout_marginTop="24dp"
             android:layout_width="match_parent"
