@@ -218,9 +218,9 @@
                 android:gravity="center_vertical"
                 android:layout_marginTop="8dp">
 
-                <ImageView android:src="@drawable/ic_facebook" android:layout_width="36dp" android:layout_height="36dp" />
-                <ImageView android:src="@drawable/ic_instagram" android:layout_width="36dp" android:layout_height="36dp" android:layout_marginStart="16dp" />
-                <ImageView android:src="@drawable/ic_telegram" android:layout_width="36dp" android:layout_height="36dp" android:layout_marginStart="16dp" />
+                <ImageView android:src="@drawable/ic_facebook" android:id="@+id/facebookShare" android:layout_width="36dp" android:layout_height="36dp" />
+                <ImageView android:src="@drawable/ic_instagram" android:id="@+id/instagramShare" android:layout_width="36dp" android:layout_height="36dp" android:layout_marginStart="16dp" />
+                <ImageView android:src="@drawable/ic_telegram" android:id="@+id/telegramShare" android:layout_width="36dp" android:layout_height="36dp" android:layout_marginStart="16dp" />
             </LinearLayout>
 
             <!-- Чат -->

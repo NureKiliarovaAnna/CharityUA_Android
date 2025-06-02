@@ -42,8 +42,14 @@ class LoginActivity : AppCompatActivity() {
                 try {
                     val response = RetrofitClient.instance.login(LoginRequest(email, password))
                     if (response.isSuccessful) {
-                        val token = response.body()?.token ?: ""
+                        val responseBody = response.body()
+                        val token = responseBody?.token ?: ""
+                        val userId = responseBody?.user?.user_id ?: -1
+                        val userName = response.body()?.user?.name ?: "Користувач"
+
                         TokenManager.saveToken(this@LoginActivity, token)
+                        TokenManager.saveUserId(this@LoginActivity, userId)
+                        TokenManager.saveUserName(this@LoginActivity, userName)
 
                         loginError.visibility = TextView.GONE
                         Toast.makeText(this@LoginActivity, "Вхід успішний", Toast.LENGTH_SHORT).show()

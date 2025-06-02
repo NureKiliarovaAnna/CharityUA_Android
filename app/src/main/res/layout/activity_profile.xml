@@ -113,10 +113,10 @@
 
         <!-- Служба підтримки -->
         <Button
-            android:id="@+id/support_button"
+            android:id="@+id/about_button"
             android:layout_width="match_parent"
             android:layout_height="56dp"
-            android:text="Служба підтримки"
+            android:text="Про додаток"
             android:textStyle="bold"
             android:textSize="16sp"
             android:textColor="@color/white"

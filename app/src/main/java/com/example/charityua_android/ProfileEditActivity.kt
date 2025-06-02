@@ -186,6 +186,7 @@ class ProfileEditActivity : AppCompatActivity() {
             .setMessage("Ви дійсно хочете вийти з акаунту?")
             .setPositiveButton("Так") { _, _ ->
                 TokenManager.clearToken(this)
+                TokenManager.clearUserId(this)
                 startActivity(Intent(this, LoginActivity::class.java))
                 finishAffinity()
             }

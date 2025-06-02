@@ -66,6 +66,25 @@ class FundraiserDetailActivity : AppCompatActivity() {
                 }
             ).show(supportFragmentManager, "DonateBottomSheet")
         }
+
+        binding.chatButton.setOnClickListener {
+            val intent = Intent(this, ChatActivity::class.java)
+            intent.putExtra("fundraiser_id", currentFundraiser.fundraiser_id)
+            intent.putExtra("fundraiser_name", currentFundraiser.title)
+            startActivity(intent)
+        }
+
+        binding.facebookShare.setOnClickListener {
+            shareFundraiser("facebook")
+        }
+
+        binding.instagramShare.setOnClickListener {
+            shareFundraiser("instagram")
+        }
+
+        binding.telegramShare.setOnClickListener {
+            shareFundraiser("telegram")
+        }
     }
 
     private fun loadFundraiser() {
@@ -168,6 +187,32 @@ class FundraiserDetailActivity : AppCompatActivity() {
                     binding.favoriteIconFilled.visibility = View.VISIBLE
                 }
             }
+        }
+    }
+
+    private fun shareFundraiser(platform: String) {
+        val shareText = "Долучайтесь до збору: ${currentFundraiser.title}\n\n" +
+                "Деталі: https://your-website.com/fundraiser/${currentFundraiser.fundraiser_id}"
+
+        val intent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, shareText)
+            type = "text/plain"
+        }
+
+        // Для Telegram можна спробувати відкривати офіційний застосунок
+        if (platform == "telegram") {
+            intent.setPackage("org.telegram.messenger")
+        } else if (platform == "facebook") {
+            intent.setPackage("com.facebook.katana")
+        } else if (platform == "instagram") {
+            intent.setPackage("com.instagram.android")
+        }
+
+        try {
+            startActivity(intent)
+        } catch (e: Exception) {
+            Toast.makeText(this, "Немає додатку $platform на вашому телефоні", Toast.LENGTH_SHORT).show()
         }
     }
 }

@@ -36,11 +36,12 @@ class ProfileActivity : AppCompatActivity() {
         }
 
         findViewById<Button>(R.id.chats_button).setOnClickListener {
-            Toast.makeText(this, "Чати ще не реалізовані", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this, MyChatsActivity::class.java))
         }
 
-        findViewById<Button>(R.id.support_button).setOnClickListener {
-            Toast.makeText(this, "Служба підтримки ще не реалізована", Toast.LENGTH_SHORT).show()
+        findViewById<Button>(R.id.about_button).setOnClickListener {
+            val intent = Intent(this, AboutActivity::class.java)
+            startActivity(intent)
         }
 
         findViewById<LinearLayout>(R.id.nav_home).setOnClickListener {

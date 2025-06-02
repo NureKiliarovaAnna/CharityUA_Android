@@ -62,4 +62,22 @@ interface ApiService {
 
     @POST("/api/donation/success")
     suspend fun postDonationSuccess(@Body request: DonationRequest): Response<Void>
+
+    // 1. Створення чату
+    @POST("/chats")
+    suspend fun createChat(@Body request: CreateChatRequest): Response<CreateChatResponse>
+
+    // 2. Отримання повідомлень чату
+    @GET("/chats/{chatId}/messages")
+    suspend fun getChatMessages(@Path("chatId") chatId: Int): Response<List<ChatMessageResponse>>
+
+    // 3. Надсилання повідомлення
+    @POST("/chats/{chatId}/messages")
+    suspend fun sendMessage(
+        @Path("chatId") chatId: Int,
+        @Body request: SendMessageRequest
+    ): Response<Void>
+
+    @GET("/chats")
+    suspend fun getMyChats(): Response<List<ChatSummary>>
 }
