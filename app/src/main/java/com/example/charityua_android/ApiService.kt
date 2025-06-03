@@ -80,4 +80,10 @@ interface ApiService {
 
     @GET("/chats")
     suspend fun getMyChats(): Response<List<ChatSummary>>
+
+    @POST("/users/fcm")
+    suspend fun updateFcmToken(@Body token: FcmTokenRequest): Response<Void>
+
+    @POST("/chats/{chatId}/read")
+    suspend fun markMessagesAsRead(@Path("chatId") chatId: Int): Response<Unit>
 }

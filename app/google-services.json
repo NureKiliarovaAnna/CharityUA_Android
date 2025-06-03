@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "172676990953",
+    "project_id": "charityua-7a1de",
+    "storage_bucket": "charityua-7a1de.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:172676990953:android:65e0d2583143d208406d78",
+        "android_client_info": {
+          "package_name": "com.example.charityua_android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "172676990953-51qkfmd8j9fie96cchf1pv5acdvmfj1u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCROw62ib6XOlPYMxJRTzBqzvXWFVXY_Jc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "172676990953-51qkfmd8j9fie96cchf1pv5acdvmfj1u.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

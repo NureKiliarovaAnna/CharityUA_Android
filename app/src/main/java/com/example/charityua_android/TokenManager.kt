@@ -7,6 +7,7 @@ object TokenManager {
     private const val KEY_TOKEN = "jwt_token"
     private const val KEY_USER_ID = "user_id"
     private const val KEY_USER_NAME = "user_name"
+    private const val KEY_FCM_TOKEN = "fcm_token"
 
     fun saveToken(context: Context, token: String) {
         context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
@@ -63,5 +64,17 @@ object TokenManager {
             .edit()
             .remove(KEY_USER_NAME)
             .apply()
+    }
+
+    fun saveFcmToken(context: Context, token: String) {
+        context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+            .edit()
+            .putString(KEY_FCM_TOKEN, token)
+            .apply()
+    }
+
+    fun getFcmToken(context: Context): String? {
+        return context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+            .getString(KEY_FCM_TOKEN, null)
     }
 }

@@ -32,13 +32,15 @@
     <!-- Кількість нових повідомлень -->
     <TextView
         android:id="@+id/chatUnreadCount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:background="@drawable/circle_red_background"
         android:textColor="@color/white"
         android:padding="4dp"
+        android:gravity="center"
         android:text="0"
         android:visibility="gone"
         android:layout_gravity="end"
-        android:textSize="12sp"/>
+        android:textSize="14sp"
+        android:textStyle="bold"/>
 </LinearLayout>

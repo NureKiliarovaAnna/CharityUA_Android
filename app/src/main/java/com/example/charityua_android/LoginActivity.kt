@@ -3,6 +3,7 @@ package com.example.charityua_android
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -50,6 +51,17 @@ class LoginActivity : AppCompatActivity() {
                         TokenManager.saveToken(this@LoginActivity, token)
                         TokenManager.saveUserId(this@LoginActivity, userId)
                         TokenManager.saveUserName(this@LoginActivity, userName)
+
+                        val fcmToken = TokenManager.getFcmToken(this@LoginActivity)
+                        if (!fcmToken.isNullOrEmpty()) {
+                            lifecycleScope.launch {
+                                try {
+                                    RetrofitClient.instance.updateFcmToken(FcmTokenRequest(fcmToken))
+                                } catch (e: Exception) {
+                                    Log.e("FCM", "Помилка відправки токена: ${e.localizedMessage}")
+                                }
+                            }
+                        }
 
                         loginError.visibility = TextView.GONE
                         Toast.makeText(this@LoginActivity, "Вхід успішний", Toast.LENGTH_SHORT).show()

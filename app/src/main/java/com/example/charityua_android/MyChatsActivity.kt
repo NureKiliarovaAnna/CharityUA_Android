@@ -26,12 +26,18 @@ class MyChatsActivity : AppCompatActivity() {
             val intent = Intent(this, ChatActivity::class.java)
             intent.putExtra("fundraiser_id", chat.fundraiserId)
             intent.putExtra("fundraiser_name", chat.fundraiserTitle)
+            intent.putExtra("chat_id", chat.chatId)
             startActivity(intent)
         }
 
         chatRecyclerView.layoutManager = LinearLayoutManager(this)
         chatRecyclerView.adapter = chatAdapter
 
+        loadChats()
+    }
+
+    override fun onResume() {
+        super.onResume()
         loadChats()
     }
 

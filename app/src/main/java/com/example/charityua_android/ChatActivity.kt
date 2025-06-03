@@ -54,6 +54,11 @@ class ChatActivity : AppCompatActivity() {
                 messageEditText.text.clear()
             }
         }
+
+        val chatId = intent.getIntExtra("chat_id", -1)
+        if (chatId != -1) {
+            markMessagesAsRead(chatId)
+        }
     }
 
     private fun createOrLoadChat() {
@@ -202,6 +207,16 @@ class ChatActivity : AppCompatActivity() {
                 outputFormat.format(date!!)
             } catch (e2: Exception) {
                 datetime.takeLast(5) // fallback на останні символи
+            }
+        }
+    }
+
+    private fun markMessagesAsRead(chatId: Int) {
+        lifecycleScope.launch {
+            try {
+                RetrofitClient.instance.markMessagesAsRead(chatId)
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
         }
     }
