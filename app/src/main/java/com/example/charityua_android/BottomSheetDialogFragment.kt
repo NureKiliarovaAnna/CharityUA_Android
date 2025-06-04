@@ -13,9 +13,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import android.content.Intent
-import android.net.Uri
-
 
 class DonateBottomSheet(
     private val fundraiserId: Int,
@@ -37,14 +34,12 @@ class DonateBottomSheet(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Кнопки швидкого введення
         binding.button100.setOnClickListener { setAmount(100) }
         binding.button200.setOnClickListener { setAmount(200) }
         binding.button500.setOnClickListener { setAmount(500) }
 
         binding.cancelButton.setOnClickListener { dismiss() }
 
-        // Оплата карткою
         binding.confirmButton.setOnClickListener {
             val cardNumber = binding.cardNumberInput.text.toString().trim()
             val expDate = binding.cardExpiryInput.text.toString().trim()
@@ -78,7 +73,6 @@ class DonateBottomSheet(
             }
         }
 
-        // 🚀 Обробник LiqPay
         binding.liqpayButton.setOnClickListener {
             openLiqPay()
         }
@@ -110,7 +104,7 @@ class DonateBottomSheet(
                 )
                 if (response.isSuccessful && response.body() != null) {
                     val liqPayResponse = response.body()!!
-                    openLiqPayBrowser(liqPayResponse.data, liqPayResponse.signature)
+                    showLiqPayWebView(liqPayResponse.data, liqPayResponse.signature)
                 } else {
                     Toast.makeText(requireContext(), "Помилка LiqPay: ${response.code()}", Toast.LENGTH_SHORT).show()
                 }
@@ -120,10 +114,27 @@ class DonateBottomSheet(
         }
     }
 
-    private fun openLiqPayBrowser(data: String, signature: String) {
-        val backendRedirectUrl = "https://charityua.me/liqpay/redirect?data=$data&signature=$signature"
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(backendRedirectUrl))
-        requireActivity().startActivity(Intent.createChooser(intent, "Відкрити в браузері..."))
+    private fun showLiqPayWebView(data: String, signature: String) {
+        val liqPayHtml = """
+            <html>
+            <body onload="document.forms[0].submit()">
+                <form action="https://www.liqpay.ua/api/3/checkout" method="post">
+                    <input type="hidden" name="data" value="$data"/>
+                    <input type="hidden" name="signature" value="$signature"/>
+                </form>
+            </body>
+            </html>
+        """.trimIndent()
+
+        val webView = WebView(requireContext())
+        webView.settings.javaScriptEnabled = true
+        webView.webViewClient = WebViewClient()
+        webView.loadDataWithBaseURL(null, liqPayHtml, "text/html", "utf-8", null)
+
+        AlertDialog.Builder(requireContext())
+            .setView(webView)
+            .setPositiveButton("Закрити") { dialog, _ -> dialog.dismiss() }
+            .show()
     }
 
     private fun updateDonation(amount: Int) {
