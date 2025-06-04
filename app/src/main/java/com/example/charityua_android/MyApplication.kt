@@ -15,17 +15,25 @@ class MyApplication : Application() {
 
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channelId = "chat_notifications"
-            val channelName = "Основні сповіщення"
-            val channelDescription = "Сповіщення для повідомлень чату та системних сповіщень"
-            val importance = NotificationManager.IMPORTANCE_HIGH
+            val chatChannel = NotificationChannel(
+                "chat_notifications",
+                "Чати",
+                NotificationManager.IMPORTANCE_HIGH
+            ).apply {
+                description = "Сповіщення для чатів"
+            }
 
-            val channel = NotificationChannel(channelId, channelName, importance).apply {
-                description = channelDescription
+            val updateChannel = NotificationChannel(
+                "fundraiser_updates",
+                "Оновлення зборів",
+                NotificationManager.IMPORTANCE_HIGH
+            ).apply {
+                description = "Сповіщення про оновлення зборів"
             }
 
             val notificationManager = getSystemService(NotificationManager::class.java)
-            notificationManager.createNotificationChannel(channel)
+            notificationManager.createNotificationChannel(chatChannel)
+            notificationManager.createNotificationChannel(updateChannel)
         }
     }
 

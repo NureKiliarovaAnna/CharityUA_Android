@@ -8,50 +8,50 @@ import okhttp3.ResponseBody
 
 interface ApiService {
 
-    @POST("/login")
+    @POST("/api/login")
     suspend fun login(@Body request: LoginRequest): Response<LoginResponse>
 
-    @POST("/register")
+    @POST("/api/register")
     suspend fun register(@Body request: RegisterRequest): Response<Void>
 
-    @POST("/forgot-password")
+    @POST("/api/forgot-password")
     suspend fun forgotPassword(@Body request: ForgotPasswordRequest): Response<Void>
 
-    @POST("/reset-password")
+    @POST("/api/reset-password")
     suspend fun resetPassword(@Body request: ResetPasswordRequest): Response<Void>
 
-    @GET("/public/fundraisers/active")
+    @GET("/api/public/fundraisers/active")
     suspend fun getActiveFundraisers(): Response<List<Fundraiser>>
 
-    @GET("public/fundraisers/{id}")
+    @GET("/api/public/fundraisers/{id}")
     suspend fun getFundraiserById(@Path("id") id: Int): Response<Fundraiser>
 
-    @POST("/donate")
+    @POST("/api/donate")
     suspend fun postDonation(@Body request: DonationRequest): Response<Unit>
 
-    @POST("/complaints")
+    @POST("/api/complaints")
     suspend fun submitComplaint(@Body request: ComplaintRequest): Response<Void>
 
-    @GET("/me")
-    suspend fun getProfile(@Header("Authorization") token: String): Response<UserProfile>
+    @GET("/api/me")
+    suspend fun getProfile(): Response<UserProfile>
 
-    @GET("/categories")
+    @GET("/api/categories")
     suspend fun getCategories(): Response<List<Category>>
 
-    @GET("/donations/my")
+    @GET("/api/donations/my")
     suspend fun getMyDonations(): Response<List<DonationWithFundraiser>>
 
-    @GET("favorites")
+    @GET("/api/favorites")
     suspend fun getFavorites(): Response<List<FavoriteFundraiser>>
 
-    @POST("/favorites")
+    @POST("/api/favorites")
     suspend fun addFavorite(@Body request: FavoriteRequest): Response<Fundraiser>
 
-    @DELETE("/favorites/{fundraiserId}")
+    @DELETE("/api/favorites/{fundraiserId}")
     suspend fun removeFavorite(@Path("fundraiserId") fundraiserId: Int): Response<Void>
 
     @Multipart
-    @PUT("profile/mobile")
+    @PUT("/api/profile/mobile")
     suspend fun updateProfile(
         @Header("Authorization") token: String,
         @Part parts: List<MultipartBody.Part>
@@ -63,27 +63,24 @@ interface ApiService {
     @POST("/api/donation/success")
     suspend fun postDonationSuccess(@Body request: DonationRequest): Response<Void>
 
-    // 1. Створення чату
-    @POST("/chats")
+    @POST("/api/chats")
     suspend fun createChat(@Body request: CreateChatRequest): Response<CreateChatResponse>
 
-    // 2. Отримання повідомлень чату
-    @GET("/chats/{chatId}/messages")
+    @GET("/api/chats/{chatId}/messages")
     suspend fun getChatMessages(@Path("chatId") chatId: Int): Response<List<ChatMessageResponse>>
 
-    // 3. Надсилання повідомлення
-    @POST("/chats/{chatId}/messages")
+    @POST("/api/chats/{chatId}/messages")
     suspend fun sendMessage(
         @Path("chatId") chatId: Int,
         @Body request: SendMessageRequest
     ): Response<Void>
 
-    @GET("/chats")
+    @GET("/api/chats")
     suspend fun getMyChats(): Response<List<ChatSummary>>
 
-    @POST("/users/fcm")
+    @POST("/api/users/fcm")
     suspend fun updateFcmToken(@Body token: FcmTokenRequest): Response<Void>
 
-    @POST("/chats/{chatId}/read")
+    @POST("/api/chats/{chatId}/read")
     suspend fun markMessagesAsRead(@Path("chatId") chatId: Int): Response<Unit>
 }

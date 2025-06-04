@@ -111,17 +111,8 @@
                     android:backgroundTint="@android:color/white"
                     android:background="@drawable/circle_button_background"
                     android:scaleType="centerInside"
-                    android:layout_marginEnd="24dp" />
-
-                <ImageButton
-                    android:id="@+id/facebook_button"
-                    android:layout_width="56dp"
-                    android:layout_height="56dp"
-                    android:src="@drawable/ic_facebook"
-                    android:contentDescription="Facebook"
-                    android:backgroundTint="@android:color/white"
-                    android:background="@drawable/circle_button_background"
-                    android:scaleType="centerInside" />
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="0dp" />
             </LinearLayout>
 
             <TextView

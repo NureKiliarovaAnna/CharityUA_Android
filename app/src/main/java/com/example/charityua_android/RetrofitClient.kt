@@ -4,11 +4,9 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.http.*
-import retrofit2.Response
 
 object RetrofitClient {
-    private const val BASE_URL = "https://eaec-2a02-2378-11a8-d490-15ac-3502-2660-979c.ngrok-free.app/"
+    private const val BASE_URL = "https://charityua.me/"
 
     private val client = OkHttpClient.Builder()
         .addInterceptor { chain ->
@@ -16,7 +14,13 @@ object RetrofitClient {
             val context = MyApplication.instance.applicationContext
             val token = TokenManager.getToken(context)
 
-            val modifiedRequest = if (!token.isNullOrEmpty()) {
+            // Шляхи, де токен не потрібен
+            val noAuthPaths = listOf("/login", "/register", "/forgot-password", "/reset-password")
+            val path = originalRequest.url.encodedPath
+
+            val needsAuth = noAuthPaths.none { path.contains(it) }
+
+            val modifiedRequest = if (!token.isNullOrEmpty() && needsAuth) {
                 originalRequest.newBuilder()
                     .addHeader("Authorization", "Bearer $token")
                     .build()

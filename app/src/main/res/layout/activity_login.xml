@@ -95,6 +95,18 @@
             android:textColor="@android:color/white"
             android:layout_marginBottom="8dp" />
 
+        <ImageButton
+            android:id="@+id/google_button"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_google"
+            android:scaleType="centerInside"
+            android:background="@null"
+            android:contentDescription="Google Sign-In"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp" />
+
         <TextView
             android:id="@+id/login_error"
             android:layout_width="match_parent"

@@ -3,10 +3,13 @@ package com.example.charityua_android
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.launch
 
 class ProfileActivity : AppCompatActivity() {
@@ -32,7 +35,7 @@ class ProfileActivity : AppCompatActivity() {
         }
 
         findViewById<Button>(R.id.notifications_button).setOnClickListener {
-            Toast.makeText(this, "Сповіщення ще не реалізовані", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this, NotificationsActivity::class.java))
         }
 
         findViewById<Button>(R.id.chats_button).setOnClickListener {
@@ -54,6 +57,28 @@ class ProfileActivity : AppCompatActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        updateNotificationIndicator()
+    }
+
+    private fun updateNotificationIndicator() {
+        val prefs = getSharedPreferences("notifications_prefs", MODE_PRIVATE)
+        val json = prefs.getString("notifications_list", "[]")
+        val type = object : TypeToken<List<NotificationItem>>() {}.type
+        val notifications = Gson().fromJson<List<NotificationItem>>(json, type)
+
+        val unreadCount = notifications.count { !it.isRead }
+
+        val badge = findViewById<TextView>(R.id.notification_badge)
+        if (unreadCount > 0) {
+            badge.text = unreadCount.toString()
+            badge.visibility = View.VISIBLE
+        } else {
+            badge.visibility = View.GONE
+        }
+    }
+
     private fun loadProfile() {
         val token = TokenManager.getToken(this)
         if (token.isNullOrEmpty()) {
@@ -64,7 +89,7 @@ class ProfileActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             try {
-                val response = RetrofitClient.instance.getProfile("Bearer $token")
+                val response = RetrofitClient.instance.getProfile()
                 if (response.isSuccessful && response.body() != null) {
                     val profile = response.body()!!
                     Log.d("ProfileActivity", "Отримано профіль: $profile")

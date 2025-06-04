@@ -58,7 +58,7 @@ class ProfileEditActivity : AppCompatActivity() {
         lifecycleScope.launch {
             try {
                 val token = TokenManager.getToken(this@ProfileEditActivity) ?: return@launch
-                val response = RetrofitClient.instance.getProfile("Bearer $token")
+                val response = RetrofitClient.instance.getProfile()
                 if (response.isSuccessful) {
                     val user = response.body()!!
                     currentUser = user

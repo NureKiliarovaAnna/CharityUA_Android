@@ -121,9 +121,9 @@ class DonateBottomSheet(
     }
 
     private fun openLiqPayBrowser(data: String, signature: String) {
-        val backendRedirectUrl = " https://c81a-176-37-228-210.ngrok-free.app/liqpay/redirect?data=$data&signature=$signature"
+        val backendRedirectUrl = "https://charityua.me/liqpay/redirect?data=$data&signature=$signature"
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(backendRedirectUrl))
-        startActivity(intent)
+        requireActivity().startActivity(Intent.createChooser(intent, "Відкрити в браузері..."))
     }
 
     private fun updateDonation(amount: Int) {

@@ -34,7 +34,6 @@ class RegisterActivity : AppCompatActivity() {
         registerError = findViewById(R.id.register_error)
         loginLink = findViewById(R.id.login_link)
         googleButton = findViewById(R.id.google_button)
-        facebookButton = findViewById(R.id.facebook_button)
 
         registerButton.setOnClickListener {
             val name = nameInput.text.toString().trim()
@@ -79,11 +78,7 @@ class RegisterActivity : AppCompatActivity() {
         }
 
         googleButton.setOnClickListener {
-            openOAuth("https://925c-176-37-228-210.ngrok-free.app/auth/google")
-        }
-
-        facebookButton.setOnClickListener {
-            openOAuth("https://925c-176-37-228-210.ngrok-free.app/auth/facebook")
+            openOAuth("https://charityua.me/api/auth/google")
         }
     }
 
