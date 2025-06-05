@@ -65,7 +65,7 @@
                         android:id="@+id/sort_label"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="за датою завершення"
+                        android:text="за датою створення"
                         android:textSize="12sp"
                         android:textColor="#555555"/>
                 </LinearLayout>
@@ -222,7 +222,7 @@
                 android:id="@+id/sort_by_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="за датою завершення"
+                android:text="за датою створення"
                 android:checked="true"/>
 
             <RadioButton

@@ -87,6 +87,11 @@ class FundraiserDetailActivity : AppCompatActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        loadFundraiser()
+    }
+
     private fun loadFundraiser() {
         lifecycleScope.launch {
             try {

@@ -1,6 +1,7 @@
 package com.example.charityua_android
 
 import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -94,8 +95,8 @@ class DonateBottomSheet(
         }
 
         val currency = "UAH"
-        val description = "Тестовий донат у LiqPay"
-        val orderId = "order_test_${System.currentTimeMillis()}"
+        val description = "Донат на збір №$fundraiserId"
+        val orderId = "order_${fundraiserId}_${System.currentTimeMillis()}"
 
         CoroutineScope(Dispatchers.Main).launch {
             try {
@@ -115,25 +116,11 @@ class DonateBottomSheet(
     }
 
     private fun openLiqPayWebView(data: String, signature: String) {
-        val html = """
-        <html>
-        <body onload="document.forms[0].submit()">
-            <form action="https://www.liqpay.ua/api/3/checkout" method="post">
-                <input type="hidden" name="data" value="$data"/>
-                <input type="hidden" name="signature" value="$signature"/>
-            </form>
-        </body>
-        </html>
-    """.trimIndent()
-
-        val webView = WebView(requireContext())
-        webView.settings.javaScriptEnabled = true
-        webView.loadDataWithBaseURL(null, html, "text/html", "utf-8", null)
-
-        AlertDialog.Builder(requireContext())
-            .setView(webView)
-            .setNegativeButton("Закрити") { dialog, _ -> dialog.dismiss() }
-            .show()
+        val intent = Intent(requireContext(), LiqPayWebViewActivity::class.java)
+        intent.putExtra(LiqPayWebViewActivity.EXTRA_DATA, data)
+        intent.putExtra(LiqPayWebViewActivity.EXTRA_SIGNATURE, signature)
+        startActivity(intent)
+        dismiss()
     }
 
 
