@@ -95,7 +95,7 @@ class DonateBottomSheet(
 
         val currency = "UAH"
         val description = "Тестовий донат у LiqPay"
-        val orderId = "order_test_${System.currentTimeMillis()}_${fundraiserId}"
+        val orderId = "order_test_${System.currentTimeMillis()}"
 
         CoroutineScope(Dispatchers.Main).launch {
             try {
@@ -104,7 +104,7 @@ class DonateBottomSheet(
                 )
                 if (response.isSuccessful && response.body() != null) {
                     val liqPayResponse = response.body()!!
-                    showLiqPayWebView(liqPayResponse.data, liqPayResponse.signature)
+                    openLiqPayWebView(liqPayResponse.data, liqPayResponse.signature)
                 } else {
                     Toast.makeText(requireContext(), "Помилка LiqPay: ${response.code()}", Toast.LENGTH_SHORT).show()
                 }
@@ -113,6 +113,29 @@ class DonateBottomSheet(
             }
         }
     }
+
+    private fun openLiqPayWebView(data: String, signature: String) {
+        val html = """
+        <html>
+        <body onload="document.forms[0].submit()">
+            <form action="https://www.liqpay.ua/api/3/checkout" method="post">
+                <input type="hidden" name="data" value="$data"/>
+                <input type="hidden" name="signature" value="$signature"/>
+            </form>
+        </body>
+        </html>
+    """.trimIndent()
+
+        val webView = WebView(requireContext())
+        webView.settings.javaScriptEnabled = true
+        webView.loadDataWithBaseURL(null, html, "text/html", "utf-8", null)
+
+        AlertDialog.Builder(requireContext())
+            .setView(webView)
+            .setNegativeButton("Закрити") { dialog, _ -> dialog.dismiss() }
+            .show()
+    }
+
 
     private fun showLiqPayWebView(data: String, signature: String) {
         val liqPayHtml = """

@@ -192,7 +192,7 @@ class FundraiserDetailActivity : AppCompatActivity() {
 
     private fun shareFundraiser(platform: String) {
         val shareText = "Долучайтесь до збору: ${currentFundraiser.title}\n\n" +
-                "Деталі: https://your-website.com/fundraiser/${currentFundraiser.fundraiser_id}"
+                "Деталі: https://charityua.me/fundraiser/${currentFundraiser.fundraiser_id}"
 
         val intent = Intent().apply {
             action = Intent.ACTION_SEND
