@@ -196,15 +196,26 @@ class ChatActivity : AppCompatActivity() {
             isoFormat.timeZone = java.util.TimeZone.getTimeZone("UTC")
             val date = isoFormat.parse(datetime)
 
+            // Додаємо зміщення на -3 години
+            val calendar = java.util.Calendar.getInstance()
+            calendar.time = date!!
+            calendar.add(java.util.Calendar.HOUR_OF_DAY, -3)
+
             val outputFormat = java.text.SimpleDateFormat("HH:mm", java.util.Locale.getDefault())
-            outputFormat.format(date!!)
+            outputFormat.format(calendar.time)
         } catch (e: Exception) {
             // fallback для рядків типу "2025-06-01 14:23:45"
             try {
                 val fallbackFormat = java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss", java.util.Locale.getDefault())
                 val date = fallbackFormat.parse(datetime)
+
+                // Додаємо зміщення на -3 години
+                val calendar = java.util.Calendar.getInstance()
+                calendar.time = date!!
+                calendar.add(java.util.Calendar.HOUR_OF_DAY, -3)
+
                 val outputFormat = java.text.SimpleDateFormat("HH:mm", java.util.Locale.getDefault())
-                outputFormat.format(date!!)
+                outputFormat.format(calendar.time)
             } catch (e2: Exception) {
                 datetime.takeLast(5) // fallback на останні символи
             }
