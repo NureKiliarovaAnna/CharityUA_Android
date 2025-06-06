@@ -24,6 +24,7 @@ class FundraiserAdapter(
         val summarySection: LinearLayout = view.findViewById(R.id.summary_section)
         val progressBar: ProgressBar = view.findViewById(R.id.fundraiser_progress_bar)
         val percentText: TextView = view.findViewById(R.id.fundraiser_percent_text)
+        val almostFinishedFlag: TextView = view.findViewById(R.id.fundraiser_almost_finished_flag)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FundraiserViewHolder {
@@ -57,25 +58,27 @@ class FundraiserAdapter(
         holder.progressBar.progress = progressPercent
         holder.percentText.text = "Прогрес: $progressPercent%"
 
-        // Якщо залишилось менше 10% до цілі
+        // Якщо залишилось менше 10% до цілі — показуємо прапорець
         val left = fundraiser.goal_amount - fundraiser.current_amount
         val percentageLeft = left.toDouble() / fundraiser.goal_amount
 
         if (percentageLeft < 0.1 && progressPercent < 100) {
+            holder.almostFinishedFlag.visibility = View.VISIBLE
             holder.summarySection.setBackgroundColor(Color.parseColor("#C8FAD0"))
-            holder.button.setBackgroundColor(Color.parseColor("#B00020"))
-            holder.button.text = "ЗАВЕРШУЄТЬСЯ"
         } else {
+            holder.almostFinishedFlag.visibility = View.GONE
             holder.summarySection.setBackgroundColor(Color.parseColor("#F1F1F1"))
-            holder.button.setBackgroundColor(Color.parseColor("#002D85"))
-            holder.button.text = "ДЕТАЛЬНІШЕ"
         }
+
+        // Завжди показуємо "ДЕТАЛЬНІШЕ" (не змінюємо колір/текст кнопки!)
+        holder.button.setBackgroundColor(Color.parseColor("#002D85"))
+        holder.button.text = "ДЕТАЛЬНІШЕ"
 
         // Відкриття деталей збору
         holder.button.setOnClickListener {
             val context = holder.itemView.context
             val intent = Intent(context, FundraiserDetailActivity::class.java)
-            intent.putExtra("fundraiser_id", fundraiser.fundraiser_id) // ✅ виправлений ключ
+            intent.putExtra("fundraiser_id", fundraiser.fundraiser_id)
             context.startActivity(intent)
         }
     }

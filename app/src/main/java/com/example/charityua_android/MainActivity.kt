@@ -209,7 +209,9 @@ class MainActivity : AppCompatActivity() {
             try {
                 val response = RetrofitClient.instance.getActiveFundraisers()
                 if (response.isSuccessful && response.body() != null) {
-                    allFundraisers = response.body()!!.filter { it.status == "active" }
+                    allFundraisers = response.body()!!.filter {
+                        it.status == "active" || it.status == "final_stage"
+                    }
                     applyFilters()
                 } else {
                     Toast.makeText(this@MainActivity, "Помилка сервера: ${response.code()}", Toast.LENGTH_SHORT).show()
